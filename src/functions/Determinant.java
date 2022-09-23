@@ -16,7 +16,7 @@ public class Determinant {
 		System.out.println(detExCof(nice.matrix, nice.row));
 	}
 
-	public static double detExCof(double[][] matrix, int size) {
+	static double detExCof(double[][] matrix, int size) {
 		if (size==2) {
 			return (matrix[0][0]*matrix[1][1])-(matrix[1][0]*matrix[0][1]);
 		}
@@ -29,7 +29,7 @@ public class Determinant {
 		}
 	}
 	
-	public static double[][] minor(double[][] matrix, int brs, int klm, int size) {
+	static double[][] minor(double[][] matrix, int brs, int klm, int size) {
 		double [][] result = new double[size-1][size-1];
 		for (int i=0; i<size-1; i++) {
 			for (int j=0; j<size-1; j++) {
@@ -46,7 +46,7 @@ public class Determinant {
 		return result;
 	}
 	
-	public static double cofactor(double[][] matrix, int brs, int klm, int size) {
+	static double cofactor(double[][] matrix, int brs, int klm, int size) {
 		return Math.pow(-1, brs+klm)*detExCof(minor(matrix, brs, klm, size), size-1);
 	}
 	
