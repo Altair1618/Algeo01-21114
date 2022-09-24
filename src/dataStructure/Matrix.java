@@ -1,4 +1,5 @@
 import java.util.Scanner;
+//import java.io.File;
 
 public class Matrix {
     double[][] matrix;
@@ -7,12 +8,16 @@ public class Matrix {
 
     //FUNGSI KONSTRUKTOR
     public void createMatrix (int row, int column) {
-        // Mengisi semua elemen matriks dengan MARK
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
+        // Mengisi semua elemen matriks dengan MARK;
+        this.row = row;
+        this.column = column;
+        this.matrix = new double[this.row][this.column];
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.column; j++) {
                 this.matrix[i][j] = MARK;
             }
         }
+        writeMatrix();
     }
 
     public void readMatrix () {
@@ -25,7 +30,6 @@ public class Matrix {
         System.out.print ("Masukkan jumlah kolom: ");
         this.column = input.nextInt();
 
-        this.matrix = new double[this.row][this.column];
         createMatrix(this.row, this.column);
 
         double inputitem;
@@ -39,6 +43,16 @@ public class Matrix {
 
         input.close();
     }
+
+   /* public void readMatrixfromFile () {
+        Scanner inputFileName = new Scanner(System.in);
+        System.out.print("Masukkan nama file masukan: ");
+        String fileName = inputFileName.nextLine();
+        inputFileName.close();
+
+        File inputFileMatrix = new File("");
+        if ()
+    }*/
 
     //FUNGSI PRIMITIF SELEKTOR
     public double getElement (int numRow, int numCol) {
@@ -192,8 +206,11 @@ public class Matrix {
     }
 
     public static void main (String[] args) {
-        /*Matrix mymatrix = new Matrix();
-        mymatrix.readMatrix();
+        //Matrix mymatrix = new Matrix();
+        //mymatrix.createMatrix(3, 3);
+        //mymatrix.readMatrix();
+        //mymatrix.writeMatrix();
+        /*mymatrix.readMatrix();
         mymatrix.swapRow(1, 2);
         mymatrix.writeMatrix();
         //mymatrix.transpose();
