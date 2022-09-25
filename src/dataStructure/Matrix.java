@@ -1,5 +1,8 @@
+package dataStructure;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
-//import java.io.File;
 
 public class Matrix {
     double[][] matrix;
@@ -8,29 +11,51 @@ public class Matrix {
 
     //FUNGSI KONSTRUKTOR
     public void createMatrix (int row, int column) {
-        // Mengisi semua elemen matriks dengan MARK;
+        // Mengisi semua elemen matriks dengan MARK
         this.row = row;
         this.column = column;
         this.matrix = new double[this.row][this.column];
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.column; j++) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
                 this.matrix[i][j] = MARK;
             }
         }
-        writeMatrix();
     }
 
     public void readMatrix () {
+        Scanner choiceInput = new Scanner(System.in);
+        System.out.println("Pilih cara input matriks: ");
+        System.out.println("- Melalui Keyboard (Ketik 1) ");
+        System.out.println("- Melalui File (Ketik 2)");
+        System.out.print("Pilihan: ");
+        int choice = choiceInput.nextInt();
+        
+
+        while (choice != 1 && choice != 2) {
+            System.out.println("Input salah! Masukkan input yang benar");
+            readMatrix();
+        }
+
+        if (choice == 1) {
+            readMatrixFromKeyboard();
+        } else {
+            readMatrixFromFile();
+        }
+        choiceInput.close();
+    }
+
+    public void readMatrixFromKeyboard () {
         // Membaca matriks melalui keyboard
         Scanner input = new Scanner(System.in);
+        int row, column;
 
         System.out.print("Masukkan jumlah baris: ");
-        this.row = input.nextInt();
+        row = input.nextInt();
 
         System.out.print ("Masukkan jumlah kolom: ");
-        this.column = input.nextInt();
+        column = input.nextInt();
 
-        createMatrix(this.row, this.column);
+        createMatrix(row, column);
 
         double inputitem;
 
@@ -44,15 +69,56 @@ public class Matrix {
         input.close();
     }
 
-   /* public void readMatrixfromFile () {
-        Scanner inputFileName = new Scanner(System.in);
-        System.out.print("Masukkan nama file masukan: ");
-        String fileName = inputFileName.nextLine();
-        inputFileName.close();
+    public void readMatrixFromFile () {
+        String filePath;
 
-        File inputFileMatrix = new File("");
-        if ()
-    }*/
+        System.out.print("Masukkan file path: ");
+        Scanner inputFilePath = new Scanner(System.in);
+        filePath = inputFilePath.nextLine();
+
+        inputFilePath.close();
+    
+        try {
+            File matrixFile = new File(filePath);
+            Scanner readMatrixFile = new Scanner(matrixFile);
+            ArrayList<ArrayList<Double>> inputMatrix = new ArrayList<ArrayList<Double>>();
+            
+            int row, column;
+
+            while (readMatrixFile.hasNextLine()) {
+                String line = readMatrixFile.nextLine();
+                ArrayList<Double> inputRow = new ArrayList<Double>();
+                for (int i = 0; i < line.length(); i++) {
+                    String currentString = "";
+                    while ((line.charAt(i) != ' ')) {
+                        currentString += line.charAt(i);
+                        i++;
+                        if (i == line.length()) {
+                            break;
+                        }
+                    } // (line.charAt(i) == ' ') 
+                    inputRow.add(Double.valueOf(currentString));
+                }
+                inputMatrix.add(inputRow);
+            }
+            readMatrixFile.close();
+
+            row = inputMatrix.size();
+            column = inputMatrix.get(0).size();
+            
+            createMatrix(row, column);
+            
+            for (int i = 0; i < this.row; i++) {
+                for (int j = 0; j < this.column; j++) {
+                    this.matrix[i][j] = inputMatrix.get(i).get(j);
+                }
+            }
+
+            inputMatrix.clear();
+        } catch (FileNotFoundException e) {
+            System.out.println("File tidak ditemukan");
+        }
+    }
 
     //FUNGSI PRIMITIF SELEKTOR
     public double getElement (int numRow, int numCol) {
@@ -74,7 +140,7 @@ public class Matrix {
          * 7 8 9 
          * Maka getRow(1) = [1, 2, 3], getElement(2) = [4, 5, 6], dst.
         */
-        double[] rowArray = new double[this.column];
+        double[] rowArray;
         rowArray = this.matrix[numRow-1];
         return rowArray;
     }
@@ -92,6 +158,21 @@ public class Matrix {
             columnArray[i] = this.matrix[i][numCol - 1];
         }
         return columnArray;
+    }
+
+    public int getRowLength() {
+        // Mengembalikan jumlah baris pada matriks
+        return this.row;
+    }
+
+    public int getColumnLength() {
+        // Mengembalikan jumlah kolom pada matriks
+        return this.column;
+    }
+
+    public void setElement(double val, int numRow, int numCol) {
+        // Mengubah nilai dari matriks pada baris numRow dan kolom numCol, numRow dan numCol adalah INDEX 
+        this.matrix[numRow][numCol] = val;
     }
 
     //FUNGSI PRIMITIF LAINNYA
@@ -134,10 +215,7 @@ public class Matrix {
 
     public boolean isSquare () {
         // Mengembalikan true apabila matriks berbentuk matriks persegi
-        if (this.row == this.column) {
-            return true;
-        }
-        return false;
+        return this.row == this.column;
     }
 
     public int countElement () {
@@ -158,7 +236,7 @@ public class Matrix {
          * swapRow (0, 2) tidak terdefinisi karena tidak terdapat row 0 pada pengguna
          * (namun indeks pada array tetap mulai dari nol)
         */
-        double temp[];
+        double[] temp;
         temp = this.matrix[a-1];
         this.matrix[a-1] = this.matrix[b-1];
         this.matrix[b-1] = temp;
@@ -205,18 +283,20 @@ public class Matrix {
         }
     }
 
-    public static void main (String[] args) {
-        //Matrix mymatrix = new Matrix();
-        //mymatrix.createMatrix(3, 3);
-        //mymatrix.readMatrix();
-        //mymatrix.writeMatrix();
-        /*mymatrix.readMatrix();
-        mymatrix.swapRow(1, 2);
-        mymatrix.writeMatrix();
-        //mymatrix.transpose();
-        //mymatrix.writeMatrix();
-        System.out.println(("row 1"));
-        mymatrix.writeLine(mymatrix.getRow(1));
-        mymatrix.writeLine(mymatrix.getColumn(1));*/
+    public void divideRow(int i, double val) {
+        // Membagi baris dengan val
+        for (int j = i; j < this.getColumnLength(); j++) {
+            this.setElement(this.getElement(i, j) / val, i, j);
+        }
     }
+
+    /*public void setPrecision (int precc) {
+        for (int i = 0; i < this.row; i++) {
+            for (int j = 0; j < this.column; j++) {
+                this.matrix[i][j] = 1;
+            }
+        }
+    }*/
+
+
 }
