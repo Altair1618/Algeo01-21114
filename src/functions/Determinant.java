@@ -1,54 +1,66 @@
 package functions;
 import dataStructure.*;
-/* NOTES:
-*  1. Ini determinan yg pake ekspansi kofaktor
- * 2. Untuk sekarang input sama return method nya dalam tipe double[][] ya gais, soalnya pas aku coba pake class
- *   Matrix malah aneh hasilnya (tapi kalo pake double[][] aman)
- * 3. Soon : Penyelesaian SPL dengan kaidah cramer
- */
+
+
+
 
 public class Determinant {
+	static final double UNDEF_DET = -9999.99;
 
 	//main buat ngetest
 	public static void main(String[] args) {
 		Matrix nice = new Matrix();
 		nice.readMatrix();
-		System.out.println(detExCof(nice.matrix, nice.row));
+		System.out.println(detExCof(nice, nice.getRowLength()));
 	}
 
-	static double detExCof(double[][] matrix, int size) {
-		if (size==2) {
-			return (matrix[0][0]*matrix[1][1])-(matrix[1][0]*matrix[0][1]);
-		}
-		else {
-			double result =0;
-			for (int k=0; k<size; k++) {
-				result += matrix[k][0]*cofactor(matrix, k+1, 1, size);
+	static double detExCof(Matrix m, int size) {
+		if (m.isSquare()) {
+			if (size==1) {
+				return (m.getElement(1, 1));
 			}
-			return result;
+			else if (size==2) {
+				return (m.getElement(1, 1)*m.getElement(2, 2))-(m.getElement(2,1)*m.getElement(1, 2));
+			}
+			
+			else {
+				double result =0;
+				for (int k=1; k<=size; k++) {
+					result += m.getElement(k, 1)*cofactor(m, k, 1, size);
+				}
+				return result;
+			}
 		}
+		
+		else {
+			return UNDEF_DET;
+		}
+		
 	}
 	
-	static double[][] minor(double[][] matrix, int brs, int klm, int size) {
-		double [][] result = new double[size-1][size-1];
-		for (int i=0; i<size-1; i++) {
-			for (int j=0; j<size-1; j++) {
+	static Matrix minor(Matrix m, int brs, int klm, int size) {
+		Matrix result = new Matrix();
+		result.createMatrix(size-1, size-1);
+		for (int i=1; i<=size-1; i++) {
+			for (int j=1; j<=size-1; j++) {
 				int k=i, l=j;
-				if (i>=brs-1) {
+				if (i>=brs) {
 					k++;
 				}
-				if (j>=klm-1) {
+				if (j>=klm) {
 					l++;
 				}
-				result[i][j] = matrix[k][l];
+				result.setElement(m.getElement(k, l), i, j);
 			}
 		}
 		return result;
 	}
 	
-	static double cofactor(double[][] matrix, int brs, int klm, int size) {
-		return Math.pow(-1, brs+klm)*detExCof(minor(matrix, brs, klm, size), size-1);
+	static double cofactor(Matrix m, int brs, int klm, int size) {
+		return Math.pow(-1, brs+klm)*detExCof(minor(m, brs, klm, size), size-1);
 	}
 	
-	
 }
+
+
+
