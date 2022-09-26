@@ -1,6 +1,8 @@
 package dataStructure;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -37,11 +39,11 @@ public class Matrix {
         }
 
         if (choice == 1) {
-            readMatrixFromKeyboard();
+            readMatrixFromKeyboard();       
         } else {
             readMatrixFromFile();
         }
-        choiceInput.close();
+        //choiceInput.close();
     }
 
     public void readMatrixFromKeyboard () {
@@ -66,23 +68,23 @@ public class Matrix {
             }
         }
 
-        input.close();
+        //input.close();
+        
     }
 
     public void readMatrixFromFile () {
+        // Membaca matrix dari file 
         String filePath;
 
         System.out.print("Masukkan file path: ");
         Scanner inputFilePath = new Scanner(System.in);
         filePath = inputFilePath.nextLine();
-
-        inputFilePath.close();
-    
+        
         try {
             File matrixFile = new File(filePath);
             Scanner readMatrixFile = new Scanner(matrixFile);
             ArrayList<ArrayList<Double>> inputMatrix = new ArrayList<ArrayList<Double>>();
-            
+                
             int row, column;
 
             while (readMatrixFile.hasNextLine()) {
@@ -101,13 +103,13 @@ public class Matrix {
                 }
                 inputMatrix.add(inputRow);
             }
-            readMatrixFile.close();
+
 
             row = inputMatrix.size();
             column = inputMatrix.get(0).size();
             
             createMatrix(row, column);
-            
+        
             for (int i = 0; i < this.row; i++) {
                 for (int j = 0; j < this.column; j++) {
                     this.matrix[i][j] = inputMatrix.get(i).get(j);
@@ -177,6 +179,27 @@ public class Matrix {
 
     //FUNGSI PRIMITIF LAINNYA
     public void writeMatrix () {
+        Scanner choiceInput = new Scanner(System.in);
+        System.out.println("Pilih cara output matriks: ");
+        System.out.println("- Terminal (Ketik 1) ");
+        System.out.println("- File Output (Ketik 2)");
+        System.out.print("Pilihan: ");
+        int choice = choiceInput.nextInt();
+        
+
+        while (choice != 1 && choice != 2) {
+            System.out.println("Input salah! Masukkan input yang benar");
+            readMatrix();
+        }
+
+        if (choice == 1) {
+            writeTerminal();       
+        } else {
+            writeFile();
+        }
+    }
+
+    public void writeTerminal () {
         // Melakukan output matriks pada terminal
         /* Format dalam bentuk segi empat:
          * 1 2 3
@@ -188,6 +211,62 @@ public class Matrix {
                 System.out.print(this.matrix[i][j]+" ");
             }
             System.out.println(this.matrix[i][this.column-1]);
+        }
+    }
+
+    public void writeFile () {
+        System.out.print("Masukkan path folder tujuan: ");
+        try (Scanner input = new Scanner(System.in)) {
+            String fileFolderPath = input.nextLine();
+
+            System.out.print("Masukkan nama file (dengan extension): ");
+            String fileName = input.nextLine();
+
+            String absolutePath = fileFolderPath + "\\" + fileName;
+
+            try {
+                File filePath = new File(absolutePath);
+                if (filePath.createNewFile()) {
+                    System.out.println("File telah dibuat: " + fileName);
+                } else {
+                    System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+                    int choiceScanner = input.nextInt();
+
+                    while (choiceScanner != 1 && choiceScanner != 2) {
+                        choiceScanner = input.nextInt();
+                    }
+
+                    if (choiceScanner == 1) {
+                        filePath.delete();
+                        System.out.println("Menghapus file " + fileName + "...");
+                        filePath.createNewFile(); 
+                        System.out.println("File baru telah dibuat: " + fileName);
+                
+                        try {
+                            String line;
+                            try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+                                for (int i = 0; i < this.getRowLength(); i++) {
+                                    line = "";
+                                    for (int j = 0; j < this.getColumnLength()-1; j++) {
+                                        line += String.valueOf(getElement(i+1, j+1));
+                                        line += " ";
+                                    } // j == getColumnLength - 1
+                                    line += String.valueOf(getElement(i+1, getColumnLength()));
+                                    line += "\n";
+                                    fileWriter.write(line);
+                                }
+                            }
+                            System.out.println("Output telah tersedia pada File.");
+                        } catch (IOException e) {
+                            System.out.println("Terjadi kesalahan.");
+                        }
+                    } else {
+                        System.out.println("Aksi dibatalkan");
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Terjadi kesalahan."); 
+            }
         }
     }
 
