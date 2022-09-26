@@ -1,3 +1,7 @@
+package functions;
+
+import dataStructure.*;
+
 public class detRedux {
     Matrix onMatrix;
     final double UNDEF_DET = -9999.99;
