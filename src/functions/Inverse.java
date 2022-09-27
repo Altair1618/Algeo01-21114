@@ -5,7 +5,7 @@ import dataStructure.*;
  * solusi tidak unik
  * */
 public class Inverse {
-	static Matrix inverse(Matrix m, int size) {
+	public static Matrix inverse(Matrix m, int size) {
 		/* NOTE
 		 * Mengembalikan inverse dari matriks m
 		 * */

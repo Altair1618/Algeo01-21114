@@ -174,7 +174,7 @@ public class Matrix {
 
     public void setElement(double val, int numRow, int numCol) {
         // Mengubah nilai dari matriks pada baris numRow dan kolom numCol, numRow dan numCol adalah INDEX 
-        this.matrix[numRow][numCol] = val;
+        this.matrix[numRow - 1][numCol - 1] = val;
     }
 
     //FUNGSI PRIMITIF LAINNYA
@@ -365,7 +365,7 @@ public class Matrix {
     public void divideRow(int i, double val) {
         // Membagi baris dengan val
         for (int j = i; j < this.getColumnLength(); j++) {
-            this.setElement(this.getElement(i, j) / val, i, j);
+            this.setElement(this.getElement(i + 1, j + 1) / val, i + 1, j + 1);
         }
     }
 
