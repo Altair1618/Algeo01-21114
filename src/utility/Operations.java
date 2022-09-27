@@ -8,7 +8,7 @@ public class Operations {
         newmat.createMatrix(mat.getRowLength(), mat.getColumnLength());
         for (int i = 0; i < mat.getRowLength(); i++) {
             for (int j = 0; j < mat.getColumnLength(); j++) {
-                newmat.setElement(mat.getElement(i + 1, j + 1), i, j);
+                newmat.setElement(mat.getElement(i + 1, j + 1), i + 1, j + 1);
             }
         }
         return newmat;

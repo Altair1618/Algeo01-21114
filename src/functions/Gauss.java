@@ -29,6 +29,8 @@ public class Gauss {
 
             if (newmat.getElement(i+1, j+1) != 0) {
                 double temp = newmat.getElement(i+1, j+1);
+                newmat.writeMatrix();
+                System.out.printf("%d %f\n", i, temp);
                 newmat.divideRow(i, temp);
             }
 
@@ -41,6 +43,7 @@ public class Gauss {
 
             j++;
         }
+
 
         mat.writeMatrix();
 
@@ -239,15 +242,41 @@ public class Gauss {
         }
     }
 
+    public static void inverseGauss(Matrix m) {
+        Matrix em = new Matrix();
+        em.createMatrix(m.getRowLength(), m.getColumnLength() * 2);
+
+        for (int i = 0; i < m.getRowLength(); i++) {
+            for (int j = 0; j < m.getColumnLength(); j++) {
+                em.setElement(m.getElement(i + 1, j + 1), i + 1, j + 1);
+            }
+        }
+
+        for (int i = 0; i < m.getRowLength(); i++) {
+            for (int j = m.getColumnLength(); j < 2 * m.getColumnLength(); j++) {
+                if (i == j - m.getColumnLength()) {
+                    em.setElement(1, i + 1, j + 1);
+                } else {
+                    em.setElement(0, i + 1, j + 1);
+                }
+            }
+        }
+
+        em = matrixGaussJordan(em);
+
+        em.writeMatrix();
+    }
+
     public static void main(String[] args) {
 		Matrix m = new Matrix();
         m.readMatrix();
 
-        m = matrixGaussJordan(m);
+        // m = matrixGaussJordan(m);
         // System.out.println("\nMatriks Hasil\n");
         // m.writeMatrix();
-        System.out.println();
+        // System.out.println();
 
-        solveSPL(m);
+        Inverse.inverse(m, 2);
+        m.writeMatrix();
     }
 }
