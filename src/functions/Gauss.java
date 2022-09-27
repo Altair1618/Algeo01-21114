@@ -242,9 +242,11 @@ public class Gauss {
         }
     }
 
-    public static void inverseGauss(Matrix m) {
+    public static Matrix inverseGauss(Matrix m) {
         Matrix em = new Matrix();
+        Matrix res = new Matrix();
         em.createMatrix(m.getRowLength(), m.getColumnLength() * 2);
+        res.createMatrix(m.getRowLength(), m.getColumnLength());
 
         for (int i = 0; i < m.getRowLength(); i++) {
             for (int j = 0; j < m.getColumnLength(); j++) {
@@ -263,20 +265,29 @@ public class Gauss {
         }
 
         em = matrixGaussJordan(em);
+        em.roundMatElmt(8);
 
-        em.writeMatrix();
+        for (int i = 0; i < m.getRowLength(); i++) {
+            for (int j = 0; j < m.getColumnLength(); j++) {
+                res.setElement(em.getElement(i + 1, j + m.getColumnLength() + 1), i + 1, j + 1);
+            }
+        }
+
+        return res;
     }
 
     public static void main(String[] args) {
 		Matrix m = new Matrix();
         m.readMatrix();
 
+
         // m = matrixGaussJordan(m);
         // System.out.println("\nMatriks Hasil\n");
         // m.writeMatrix();
         // System.out.println();
 
-        Inverse.inverse(m, 2);
+        // Inverse.inverse(m, 2);
+        m = inverseGauss(m);
         m.writeMatrix();
     }
 }

@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -369,13 +371,13 @@ public class Matrix {
         }
     }
 
-    /*public void setPrecision (int precc) {
+    public void roundMatElmt (int sc) {
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.column; j++) {
-                this.matrix[i][j] = 1;
+                this.matrix[i][j] = BigDecimal.valueOf(this.matrix[i][j]).setScale(sc, RoundingMode.HALF_UP).doubleValue();
             }
         }
-    }*/
+    }
 
 
 }
