@@ -1,5 +1,4 @@
 package functions;
-
 import dataStructure.*;
 
 public class detRedux {
