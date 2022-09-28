@@ -29,8 +29,6 @@ public class Gauss {
 
             if (newmat.getElement(i+1, j+1) != 0) {
                 double temp = newmat.getElement(i+1, j+1);
-                newmat.writeMatrix();
-                System.out.printf("%d %f\n", i, temp);
                 newmat.divideRow(i, temp);
             }
 
@@ -43,9 +41,6 @@ public class Gauss {
 
             j++;
         }
-
-
-        mat.writeMatrix();
 
         return newmat;
     }
@@ -287,7 +282,14 @@ public class Gauss {
         // System.out.println();
 
         // Inverse.inverse(m, 2);
-        m = inverseGauss(m);
-        m.writeMatrix();
+        // m = inverseGauss(m);
+        // m.writeMatrix();
+
+        // m = inverseGauss(m);
+        // m.writeMatrix();
+
+        m = matrixGauss(m);
+
+        solveSPL(m);
     }
 }
