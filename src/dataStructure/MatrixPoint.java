@@ -1,8 +1,6 @@
 package dataStructure;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -98,6 +96,15 @@ public class MatrixPoint {
         } catch (FileNotFoundException e) {
             System.out.println("File tidak ditemukan");
         }
+    }
+
+    // FUNGSI SELEKTOR
+    public double[][] getMatrixPoint () {
+        return this.pointm;
+    }
+
+    public int getCountPoint () {
+        return this.countPoint;
     }
 
     // FUNGSI LAINNYA
