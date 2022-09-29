@@ -278,6 +278,10 @@ public class Matrix {
         return this.row;
     }
 
+    public double[][] getMatrix() {
+        return this.matrix;
+    }
+
 
     //FUNGSI PRIMITIF LAINNYA
     public void writeMatrix () {
