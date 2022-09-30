@@ -272,8 +272,8 @@ public class Gauss {
     }
 
     public static void main(String[] args) {
-		Matrix m = new Matrix();
-        m.readMatrix();
+		// Matrix m = new Matrix();
+        // m.readMatrix();
 
 
         // m = matrixGaussJordan(m);
@@ -288,8 +288,8 @@ public class Gauss {
         // m = inverseGauss(m);
         // m.writeMatrix();
 
-        m = matrixGauss(m);
+        // m = matrixGauss(m);
 
-        solveSPL(m);
+        // solveSPL(m);
     }
 }

@@ -32,13 +32,13 @@ public class Operations {
     }
 
     public static void main(String[] args) {
-        Matrix m1 = new Matrix();
-        Matrix m2 = new Matrix();
+        // Matrix m1 = new Matrix();
+        // Matrix m2 = new Matrix();
 
-        m1.readMatrix();
-        m2.readMatrix();
+        // m1.readMatrix();
+        // m2.readMatrix();
 
-        Matrix res = multiplyMatrix(m1, m2);
-        res.writeMatrix();
+        // Matrix res = multiplyMatrix(m1, m2);
+        // res.writeMatrix();
     }
 }
