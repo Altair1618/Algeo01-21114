@@ -1,35 +1,54 @@
 package functions;
+
 import dataStructure.*;
 /* NOTE:
- * Inverse dengan metode minor-kofaktor, belum menangani kasus tidak ada penyelesaian atau 
- * solusi tidak unik
+ * Inverse dengan metode minor-kofaktor
  * */
 public class Inverse {
-	public static Matrix inverse(Matrix m, int size) {
+	static final Matrix noInv = new Matrix(); 
+	//Jika suatu matrix tidak mempunyai inverse, maka akan inverse() mengembalikan noInv
+	static double[] noSol = {-9999.999};
+	//Jika suatu SPL tidak mempunyai solusi unik, maka inverseSPL() mengembalikan noSol
+	
+	
+	static Matrix inverse(Matrix m, int size) {
 		/* NOTE
 		 * Mengembalikan inverse dari matriks m
 		 * */
+		
+		//Buat matrix untuk menampung hasil kofaktor (cof) dan hasil inverse (result)
 		Matrix result = new Matrix();
 		result.createMatrix(size, size);
+		noInv.createMatrix(0, 0);
+		
 		Matrix cof = new Matrix();
 		cof.createMatrix(size, size);
 		
+		//Hitung determinan
 		double d = Determinant.detExCof(m, size);
-		// if (d != 0)
-		for (int i=1; i<=size; i++) {
-			for (int j=1; j<=size; j++) {
-				cof.setElement(Determinant.cofactor(m, i, j, size), i, j);
-			}
+		
+		
+		if (d==0) {
+			return noInv;
 		}
-		//transpose cof, kalikan setiap elemen dengan 1/d, simpen di result
-		cof.transpose();
-		for (int i=1; i<=size; i++) {
-			for (int j=1; j<=size; j++) {
-				result.setElement(cof.getElement(i, j)*(1/d), i, j);
+		else {
+			//Isi matrix kofaktor (cof)
+			for (int i=1; i<=size; i++) {
+				for (int j=1; j<=size; j++) {
+					cof.setElement(Determinant.cofactor(m, i, j, size), i, j);
+				}
 			}
-		}	
-	
-		return result;
+			//transpose cof, kalikan setiap elemen dengan 1/d, simpen di result
+			cof.transpose();
+			for (int i=1; i<=size; i++) {
+				for (int j=1; j<=size; j++) {
+					result.setElement(cof.getElement(i, j)*(1/d), i, j);
+				}
+			}	
+		
+			return result;
+		}
+
 		//else (d==0) : tidak mempunyai inverse
 		
 	}
@@ -60,23 +79,44 @@ public class Inverse {
 		//inverse A, simpen di temp
 		temp = inverse(A, var);
 		
-		//kalikan temp dengan B, simpen di result
-		for (int i=0; i<var; i++) {
-			result[i] = 0;
-			for (int k=0; k<var; k++) {
-				result[i] += temp.getElement(i+1, k+1)*B[k];
-			}
+		if (temp==noInv) {
+			return noSol;
 		}
-		return result;
+		else {
+			//kalikan temp dengan B, simpen di result
+			// result = (inverse(A)) * B
+			for (int i=0; i<var; i++) {
+				result[i] = 0;
+				for (int k=0; k<var; k++) {
+					result[i] += temp.getElement(i+1, k+1)*B[k];
+				}
+			}
+			return result;
+		}
 	}
 	
-	public static void main(String[] args) {
-		Matrix A = new Matrix();
-		A.readMatrix();
-		double[] B = inverseSPL(A, A.getRowLength());
-		for (int i=0; i<A.getRowLength(); i++) {
-			System.out.println(B[i]);
+	static void displayInverse(Matrix inv) {
+		if (inv == noInv) {
+			System.out.println("Matriks tidak memiliki inverse");
 		}
-
+		else {
+			inv.writeMatrix();
+		}
+	}
+	
+	static void displayInvSPLResult(double[] sol) {
+		if (sol.equals(noSol)) {
+			System.out.println("Tidak dapat diselesaikan dengan metode Inverse karena matriks koefisien tidak memiliki inverse");
+		}
+		else {
+			for (int i=0; i<sol.length; i++) {
+				System.out.printf("x%d = %f\n", i+1, sol[i]);
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Matrix augmented = new Matrix();
+		augmented.readMatrix();
+		displayInvSPLResult(inverseSPL(augmented, augmented.getRowLength()));
 	}	
 }

@@ -2,12 +2,11 @@ package functions;
 import functions.Determinant;
 import dataStructure.*;
 
-/*
- * NOTES
- * 1. Belum menangani kasus tidak ada penyelesaian atau solusi tidak unik
- */
 
 public class Cramer {
+	static final double[] noSol = {-9999.999};
+	//Jika suatu SPL tidak mempunyai solusi unik, maka cramerSPL() mengembalikan noSol
+	
 	static double[] cramerSPL (Matrix augmentedMatrix, int var) {
 		/* NOTE
 		 * Menemukan solusi SPL dengan kaidah Cramer, dengan input berupa matriks augmented 
@@ -36,35 +35,45 @@ public class Cramer {
 		//hitung determinan A, simpan di d
 		d = Determinant.detExCof(A, var);
 		
-		// if (d != 0) 
-		//hitung nilai x ke-n
-		for (int n=1; n<=var; n++) {
-			//isi temp
-			for (int i=1; i<=var; i++) {
-				for (int j=1; j<=var; j++) {
-					if (j==n) {
-						temp.setElement(B[i-1], i, j);
-					}
-					else {
-						temp.setElement(A.getElement(i, j), i, j);
+		if (d==0) {
+			return noSol;
+		}
+		else {
+			//hitung nilai x ke-n
+			for (int n=1; n<=var; n++) {
+				//isi temp
+				for (int i=1; i<=var; i++) {
+					for (int j=1; j<=var; j++) {
+						if (j==n) {
+							temp.setElement(B[i-1], i, j);
+						}
+						else {
+							temp.setElement(A.getElement(i, j), i, j);
+						}
 					}
 				}
+				// hitung det(temp)/d, simpan di result
+				result[n-1] = Determinant.detExCof(temp, var)/d;
 			}
-			// hitung det(temp)/d, simpan di result
-			result[n-1] = Determinant.detExCof(temp, var)/d;
+			return result;
 		}
-		//else : tidak ada penyelesaian unik.
 		
-		return result;
+	}
+	
+	static void displaySPLCramerResult(double[] sol) {
+		if (sol.equals(noSol)) {
+			System.out.println("Tidak dapat diselesaikan dengan metode Cramer karena determinan matriks koefisien = 0");
+		}
+		else {
+			for (int i=0; i<sol.length; i++) {
+				System.out.printf("x%d = %f\n", i+1, sol[i]);
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
-		Matrix A = new Matrix();
-		A.readMatrix();
-		double[] solution = cramerSPL(A, 3);
-		for (int i=0; i<3; i++) {
-			System.out.println(solution[i]);
-		}
- 		
+		Matrix augmented = new Matrix();
+		augmented.readMatrix();
+		displaySPLCramerResult(cramerSPL(augmented, augmented.getRowLength()));
 	}
 }
