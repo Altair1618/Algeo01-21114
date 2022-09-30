@@ -121,9 +121,9 @@ public class Bicubic {
     public static void main(String[] args) {
         // Matrix invX = generateInverseMatrixX();
 
-        Matrix m = new Matrix();
-        m.readMatrix();
+        // Matrix m = new Matrix();
+        // m.readMatrix();
 
-        System.out.println(calcBilinear(m, 0.5, 0.5));
+        // System.out.println(calcBilinear(m, 0.5, 0.5));
     }
 }

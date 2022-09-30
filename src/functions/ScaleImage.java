@@ -59,10 +59,10 @@ public class ScaleImage {
     }
 
     public static void main(String[] args) {
-        Matrix m = new Matrix();
-        m.readMatrix();
+        // Matrix m = new Matrix();
+        // m.readMatrix();
 
-        Matrix pad = addPadding(m);
-        pad.writeMatrix();
+        // Matrix pad = addPadding(m);
+        // pad.writeMatrix();
     }
 }
