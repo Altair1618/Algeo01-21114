@@ -26,62 +26,9 @@ public class Matrix {
         }
     }
 
-    public void readMatrix () {
-        Scanner choiceInput = new Scanner(System.in);
-        System.out.println("Pilih cara input matriks: ");
-        System.out.println("- Melalui Keyboard (Ketik 1) ");
-        System.out.println("- Melalui File (Ketik 2)");
-        System.out.print("Pilihan: ");
-        int choice = choiceInput.nextInt();
-        
 
-        while (choice != 1 && choice != 2) {
-            System.out.println("Input salah! Masukkan input yang benar");
-            readMatrix();
-        }
-
-        if (choice == 1) {
-            readMatrixFromKeyboard();       
-        } else {
-            readMatrixFromFile();
-        }
-        //choiceInput.close();
-    }
-
-    public void readMatrixFromKeyboard () {
-        // Membaca matriks melalui keyboard
-        Scanner input = new Scanner(System.in);
-        int row, column;
-
-        System.out.print("Masukkan jumlah baris: ");
-        row = input.nextInt();
-
-        System.out.print ("Masukkan jumlah kolom: ");
-        column = input.nextInt();
-
-        createMatrix(row, column);
-
-        double inputitem;
-
-        for (int i = 0; i < this.row; i++) {
-            for (int j = 0; j < this.column; j++) {
-                inputitem = input.nextDouble();
-                this.matrix[i][j] = inputitem;
-            }
-        }
-
-        //input.close();
-        
-    }
-
-    public void readMatrixFromFile () {
-        // Membaca matrix dari file 
-        String filePath;
-
-        System.out.print("Masukkan file path: ");
-        Scanner inputFilePath = new Scanner(System.in);
-        filePath = inputFilePath.nextLine();
-        
+    public void readMatrixFromFile (String filePath) {
+        // Membaca matrix dari file   
         try {
             File matrixFile = new File(filePath);
             Scanner readMatrixFile = new Scanner(matrixFile);
@@ -119,30 +66,10 @@ public class Matrix {
             }
 
             inputMatrix.clear();
+            readMatrixFile.close();
         } catch (FileNotFoundException e) {
             System.out.println("File tidak ditemukan");
         }
-    }
-
-    public void readMatrixPoint () {
-        Scanner choiceInput = new Scanner(System.in);
-        System.out.println("Pilih cara input Point: ");
-        System.out.println("- Melalui Keyboard (Ketik 1) ");
-        System.out.println("- Melalui File (Ketik 2)");
-        System.out.print("Pilihan: ");
-        int choice = choiceInput.nextInt();
-
-        while (choice != 1 && choice != 2) {
-            System.out.println("Input salah! Masukkan input yang benar");
-            readMatrixPoint();
-        }
-
-        if (choice == 1) {
-            readMatrixPointFromKeyboard();       
-        } else {
-            readMatrixPointFromFile();
-        }
-        choiceInput.close();
     }
 
     public void readMatrixPointFromKeyboard () {
@@ -166,13 +93,7 @@ public class Matrix {
         //input.close();
     }
 
-    public void readMatrixPointFromFile () {
-        String filePath;
-
-        System.out.print("Masukkan file path: ");
-        Scanner inputFilePath = new Scanner(System.in);
-        filePath = inputFilePath.nextLine();
-        
+    public void readMatrixPointFromFile (String filePath) {
         try {
             File matrixFile = new File(filePath);
             Scanner readMatrixFile = new Scanner(matrixFile);
@@ -209,6 +130,7 @@ public class Matrix {
             }
 
             inputMatrix.clear();
+            readMatrixFile.close();
         } catch (FileNotFoundException e) {
             System.out.println("File tidak ditemukan");
         }
@@ -266,7 +188,7 @@ public class Matrix {
     }
 
     public void setElement(double val, int numRow, int numCol) {
-        // Mengubah nilai dari matriks pada baris numRow dan kolom numCol, numRow dan numCol adalah INDEX 
+        // Mengubah nilai dari matriks pada baris numRow dan kolom numCol, numRow dan numCol bukan INDEX 
         this.matrix[numRow - 1][numCol - 1] = val;
     }
 
@@ -295,7 +217,7 @@ public class Matrix {
 
         while (choice != 1 && choice != 2) {
             System.out.println("Input salah! Masukkan input yang benar");
-            readMatrix();
+            writeMatrix();
         }
 
         if (choice == 1) {
