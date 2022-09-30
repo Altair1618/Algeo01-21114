@@ -46,13 +46,16 @@ public class Interpolasi_polinom {
 		System.out.println("Fungsi polinomial: ");
 		System.out.printf("f(x) = ");
 		if (solution.getElement(1, 1) != 0) {
-			System.out.printf("%f ", solution.getElement(1, 1));
+			System.out.print(solution.getElement(1, 1) + " ");
+			//System.out.printf("%f ", solution.getElement(1, 1));
 		}
 		if (solution.getElement(2, 1) > 0) {
-			System.out.printf("+ (%f)x ", solution.getElement(2, 1));
+			System.out.print("+ (" + solution.getElement(2, 1) + ")x ");
+			//System.out.printf("+ (%f)x ", solution.getElement(2, 1));
 		}
 		else if (solution.getElement(2, 1) < 0) {
-			System.out.printf("- (%f)x ", -solution.getElement(2, 1));
+			System.out.print("- (" + (-solution.getElement(2, 1)) + ")x ");
+			//System.out.printf("- (%f)x ", -solution.getElement(2, 1));
 		}
 		
 		for (int i=3; i<=n; i++) {
@@ -60,10 +63,12 @@ public class Interpolasi_polinom {
 				System.out.println();
 			}
 			if (solution.getElement(i, 1) > 0) {
-				System.out.printf("+ (%f)x^%d ", solution.getElement(i, 1), i-1);
+				System.out.print("+ (" + solution.getElement(i, 1) + ")x^" + (i-1) + " ");
+				//System.out.printf("+ (%f)x^%d ", solution.getElement(i, 1), i-1);
 			}
 			else if (solution.getElement(i, 1) < 0) {
-				System.out.printf("- (%f)x^%d ", -solution.getElement(i, 1), i-1);
+				System.out.print("- (" + (-solution.getElement(i, 1)) + ")x^" + (i-1) + " ");
+				//System.out.printf("- (%f)x^%d ", -solution.getElement(i, 1), i-1);
 			}
 		}
 		System.out.println();
@@ -81,7 +86,9 @@ public class Interpolasi_polinom {
 			}
 			
 			// Tampilkan f(x)
-			System.out.printf("f(%f) = %f\n", x, result);
+			System.out.print("f(" + x + ") = " + result);
+			System.out.println();
+			//System.out.printf("f(%f) = %f\n", x, result);
 			
 			System.out.print("Lanjutkan? (Y/N): ");
 			String opsi = inputN.next();
