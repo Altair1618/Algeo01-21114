@@ -43,11 +43,11 @@ public class ScaleImage {
 
         Matrix mimg = new Matrix();
         mimg.createMatrix(width, height);
-        System.out.printf("%d %d\n", width, height);
+        // System.out.printf("%d %d\n", width, height);
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                System.out.printf("%d %d\n", i, j);
+                // System.out.printf("%d %d\n", i, j);
                 mimg.setElement(Math.abs(img.getRGB(i, j)), i + 1, j + 1);
             }
         }
@@ -55,8 +55,23 @@ public class ScaleImage {
         Matrix scaledImage = canvasScaledImage(mimg);
         mimg = addPadding(mimg);
 
+        System.out.println("Harap tunggu beberapa saat...");
+        int total = (mimg.getRowLength() - 3) * (mimg.getColumnLength() - 3);
         for (int i = 1; i < mimg.getRowLength() - 2; i++) {
             for (int j = 1; j < mimg.getColumnLength() - 2; j++) {
+                // Pemberian Progress
+                if (((i - 1) * (mimg.getColumnLength() - 3) + (j - 1)) == (total / 10)) {
+                    System.out.println("10% Done");
+                } else if (((i - 1) * (mimg.getColumnLength() - 3) + (j - 1)) == (total / 4)) {
+                    System.out.println("25% Done");
+                } else if (((i - 1) * (mimg.getColumnLength() - 3) + (j - 1)) == (total / 2)) {
+                    System.out.println("50% Done");
+                } else if (((i - 1) * (mimg.getColumnLength() - 3) + (j - 1)) == (3 * total / 4)) {
+                    System.out.println("75% Done");
+                } else if (((i - 1) * (mimg.getColumnLength() - 3) + (j - 1)) == (9 * total / 10)) {
+                    System.out.println("90% Done");
+                }
+
                 // Membuat matriks input bicubic
                 Matrix cr = new Matrix();
                 cr.createMatrix(4, 4);
@@ -79,13 +94,13 @@ public class ScaleImage {
                 newBlue = Math.abs(Bicubic.calcBicubic(cb, 0.5, 0));
                 newGreen = Math.abs(Bicubic.calcBicubic(cg, 0.5, 0));
                 if (newRed > 255) {
-                    newRed = 255;
+                    newRed = 2 * 255 - newRed;
                 }
                 if (newBlue > 255) {
-                    newBlue = 255;
+                    newBlue = 2 * 255 - newBlue;
                 }
                 if (newGreen > 255) {
-                    newGreen = 255;
+                    newGreen = 2 * 255 - newGreen;
                 }
                 rgb = new Color((int) newRed, (int) newGreen, (int) newBlue).getRGB();
 
@@ -95,13 +110,13 @@ public class ScaleImage {
                 newBlue = Math.abs(Bicubic.calcBicubic(cb, 0, 0.5));
                 newGreen = Math.abs(Bicubic.calcBicubic(cg, 0, 0.5));
                 if (newRed > 255) {
-                    newRed = 255;
+                    newRed = 2 * 255 - newRed;
                 }
                 if (newBlue > 255) {
-                    newBlue = 255;
+                    newBlue = 2 * 255 - newBlue;
                 }
                 if (newGreen > 255) {
-                    newGreen = 255;
+                    newGreen = 2 * 255 - newGreen;
                 }
                 rgb = new Color((int) newRed, (int) newGreen, (int) newBlue).getRGB();
 
@@ -111,13 +126,13 @@ public class ScaleImage {
                 newBlue = Math.abs(Bicubic.calcBicubic(cb, 0.5, 0.5));
                 newGreen = Math.abs(Bicubic.calcBicubic(cg, 0.5, 0.5));
                 if (newRed > 255) {
-                    newRed = 255;
+                    newRed = 2 * 255 - newRed;
                 }
                 if (newBlue > 255) {
-                    newBlue = 255;
+                    newBlue = 2 * 255 - newBlue;
                 }
                 if (newGreen > 255) {
-                    newGreen = 255;
+                    newGreen = 2 * 255 - newGreen;
                 }
                 rgb = new Color((int) newRed, (int) newGreen, (int) newBlue).getRGB();
 
@@ -128,13 +143,13 @@ public class ScaleImage {
                     newBlue = Math.abs(Bicubic.calcBicubic(cb, 1, 0.5));
                     newGreen = Math.abs(Bicubic.calcBicubic(cg, 1, 0.5));
                     if (newRed > 255) {
-                        newRed = 255;
+                        newRed = 2 * 255 - newRed;
                     }
                     if (newBlue > 255) {
-                        newBlue = 255;
+                        newBlue = 2 * 255 - newBlue;
                     }
                     if (newGreen > 255) {
-                        newGreen = 255;
+                        newGreen = 2 * 255 - newGreen;
                     }
                     rgb = new Color((int) newRed, (int) newGreen, (int) newBlue).getRGB();
 
@@ -146,13 +161,13 @@ public class ScaleImage {
                     newBlue = Math.abs(Bicubic.calcBicubic(cb, 0.5, 1));
                     newGreen = Math.abs(Bicubic.calcBicubic(cg, 0.5, 1));
                     if (newRed > 255) {
-                        newRed = 255;
+                        newRed = 2 * 255 - newRed;
                     }
                     if (newBlue > 255) {
-                        newBlue = 255;
+                        newBlue = 2 * 255 - newBlue;
                     }
                     if (newGreen > 255) {
-                        newGreen = 255;
+                        newGreen = 2 * 255 - newGreen;
                     }
                     rgb = new Color((int) newRed, (int) newGreen, (int) newBlue).getRGB();
 
@@ -181,7 +196,7 @@ public class ScaleImage {
 
         try {
             File f = new File(
-                    String.format("../BackupTubes/src/functions/%s", namafile));
+                    String.format("../Algeo01-21114/test/%s", namafile));
             ImageIO.write(simg, "png", f);
         }
         catch (IOException e) {
