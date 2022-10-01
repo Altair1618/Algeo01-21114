@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class ScaleImage {
     public static BufferedImage readImage() throws IOException {
         Scanner in = new Scanner(System.in);
-        System.out.println("Masukkan Nama File Gambar:");
+        System.out.println("Masukkan Nama File Gambar (Pastikan gambar sudah ditaruh di folder test):");
         String namafile = in.next();
         File image = new File(String.format("../Algeo01-21114/test/%s", namafile));
 
@@ -198,6 +198,7 @@ public class ScaleImage {
             File f = new File(
                     String.format("../Algeo01-21114/test/%s", namafile));
             ImageIO.write(simg, "png", f);
+            System.out.println("File image sudah terbuat di folder test");
         }
         catch (IOException e) {
             System.out.println(e);
