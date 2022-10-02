@@ -1,5 +1,8 @@
 package functions;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import dataStructure.*;
 /* NOTE:
  * Inverse dengan metode minor-kofaktor
@@ -7,11 +10,11 @@ import dataStructure.*;
 public class Inverse {
 	static final Matrix noInv = new Matrix(); 
 	//Jika suatu matrix tidak mempunyai inverse, maka akan inverse() mengembalikan noInv
-	static double[] noSol = {-9999.999};
+	static final double[] noSol = {-9999.999};
 	//Jika suatu SPL tidak mempunyai solusi unik, maka inverseSPL() mengembalikan noSol
 	
 	
-	static Matrix inverse(Matrix m, int size) {
+	public static Matrix inverse(Matrix m, int size) {
 		/* NOTE
 		 * Mengembalikan inverse dari matriks m
 		 * */
@@ -52,7 +55,7 @@ public class Inverse {
 		//else (d==0) : tidak mempunyai inverse
 		
 	}
-	static double[] inverseSPL(Matrix augmentedMatrix, int var) {
+	public static double[] inverseSPL(Matrix augmentedMatrix, int var) {
 		/* NOTE
 		 * Menemukan solusi SPL dengan metode inverse, dengan input berupa matriks augmented 
 		 * dan jumlah variabel (var) dan mengembalikan array berukuran var yang berisi solusi 
@@ -95,7 +98,7 @@ public class Inverse {
 		}
 	}
 	
-	static void displayInverse(Matrix inv) {
+	public static void displayInverse(Matrix inv) {
 		if (inv == noInv) {
 			System.out.println("Matriks tidak memiliki inverse");
 		}
@@ -103,8 +106,29 @@ public class Inverse {
 			inv.writeMatrix();
 		}
 	}
-	
-	static void displayInvSPLResult(double[] sol) {
+
+	public static void writeInverse(FileWriter fileWriter, Matrix inv) {
+		try {
+			if (inv == noInv) {
+				fileWriter.write("Matriks tidak memiliki inverse\n");
+			}
+			else {
+				for (int i = 0; i < inv.getRowLength(); i++) {
+					for (int j = 0; j < inv.getColumnLength()-1; j++) {
+						fileWriter.write(String.valueOf(inv.getElement(i+1, j+1)));
+						fileWriter.write(" ");
+					}
+					fileWriter.write(String.valueOf(inv.getElement(i+1, inv.getColumnLength())));
+					fileWriter.write("\n");
+				}
+			}
+			System.out.println("Output telah tersedia pada File.");
+		} catch (IOException e) {
+			System.out.print("");
+		}
+	}
+
+	public static void displayInvSPLResult(double[] sol) {
 		if (sol.equals(noSol)) {
 			System.out.println("Tidak dapat diselesaikan dengan metode Inverse karena matriks koefisien tidak memiliki inverse");
 		}
@@ -114,9 +138,24 @@ public class Inverse {
 			}
 		}
 	}
-	public static void main(String[] args) {
-		Matrix augmented = new Matrix();
-		augmented.readMatrix();
-		displayInvSPLResult(inverseSPL(augmented, augmented.getRowLength()));
-	}	
+
+	public static void writeInvSPLResult(FileWriter fileWriter, double[] sol) {
+		try {
+			if (sol.equals(noSol)) {
+				fileWriter.write("Tidak dapat diselesaikan dengan metode Inverse karena matriks koefisien tidak memiliki inverse");
+			}
+			else {
+				for (int i=0; i<sol.length; i++) {
+					fileWriter.write("x");
+					fileWriter.write(String.valueOf(i+1));
+					fileWriter.write(" = ");
+					fileWriter.write(String.valueOf(sol[i]));
+					fileWriter.write("\n");
+				}
+			}
+			System.out.println("");
+		} catch (IOException e) {
+			System.out.print("");
+		}
+	}
 }

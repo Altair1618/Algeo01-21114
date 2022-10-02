@@ -12,11 +12,10 @@ import java.util.Scanner;
 public class ScaleImage {
     public static BufferedImage readImage() throws IOException {
         Scanner in = new Scanner(System.in);
-        System.out.println("Masukkan Nama File Gambar (Pastikan gambar sudah ditaruh di folder test):");
+        System.out.print("Masukkan Nama File Gambar (Pastikan gambar sudah ditaruh di folder test): ");
         String namafile = in.next();
-        File image = new File(String.format("../Algeo01-21114/test/%s", namafile));
+        File image = new File(String.format("../test/%s", namafile));
 
-        in.close();
         return ImageIO.read(image);
     }
 
@@ -191,20 +190,18 @@ public class ScaleImage {
         }
 
         Scanner in = new Scanner(System.in);
-        System.out.println("Masukkan Nama File Gambar Tujuan:");
-        String namafile = in.next();
+        System.out.print("Masukkan Nama File Gambar Tujuan: ");
+        String namafile = in.nextLine();
 
         try {
             File f = new File(
-                    String.format("../Algeo01-21114/test/%s", namafile));
+            String.format("../test/%s", namafile));
             ImageIO.write(simg, "png", f);
             System.out.println("File image sudah terbuat di folder test");
         }
         catch (IOException e) {
             System.out.println(e);
         }
-
-        in.close();
     }
 
     public static Matrix addPadding(Matrix m) {

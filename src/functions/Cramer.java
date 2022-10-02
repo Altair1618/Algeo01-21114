@@ -1,5 +1,7 @@
 package functions;
-import functions.Determinant;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import dataStructure.*;
 
 
@@ -7,7 +9,7 @@ public class Cramer {
 	static final double[] noSol = {-9999.999};
 	//Jika suatu SPL tidak mempunyai solusi unik, maka cramerSPL() mengembalikan noSol
 	
-	static double[] cramerSPL (Matrix augmentedMatrix, int var) {
+	public static double[] cramerSPL (Matrix augmentedMatrix, int var) {
 		/* NOTE
 		 * Menemukan solusi SPL dengan kaidah Cramer, dengan input berupa matriks augmented 
 		 * dan jumlah variabel (var) dan mengembalikan array berukuran var yang berisi solusi 
@@ -60,7 +62,7 @@ public class Cramer {
 		
 	}
 	
-	static void displaySPLCramerResult(double[] sol) {
+	public static void displaySPLCramerResult(double[] sol) {
 		if (sol.equals(noSol)) {
 			System.out.println("Tidak dapat diselesaikan dengan metode Cramer karena determinan matriks koefisien = 0");
 		}
@@ -70,10 +72,24 @@ public class Cramer {
 			}
 		}
 	}
-	
-	public static void main(String[] args) {
-		Matrix augmented = new Matrix();
-		augmented.readMatrix();
-		displaySPLCramerResult(cramerSPL(augmented, augmented.getRowLength()));
+
+	public static void writeSPLCramerResult(FileWriter fileWriter, double[] sol) {
+		try {
+			if (sol.equals(noSol)) {
+				fileWriter.write("Tidak dapat diselesaikan dengan metode Cramer karena determinan matriks koefisien = 0\n");
+			}
+			else {
+				for (int i=0; i<sol.length; i++) {
+					fileWriter.write("x");
+					fileWriter.write(String.valueOf(i+1));
+					fileWriter.write(" = ");
+					fileWriter.write(String.valueOf(sol[i]));
+					fileWriter.write("\n");
+				}
+			}
+			System.out.println("Output telah tersedia pada File.");
+		} catch (IOException e) {
+		System.out.print("");
+		}
 	}
 }

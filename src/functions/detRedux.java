@@ -12,7 +12,7 @@ public class detRedux {
         }
         // Matriks berbentuk persegi
         if (onMatrix.countElement() == 1) {
-            return onMatrix.getElement(0, 0);
+            return onMatrix.getElement(1, 1);
         } 
 
         // Matriks bukan berukuran 1 x 1
@@ -44,5 +44,33 @@ public class detRedux {
         }
 
         return det;
+    }
+
+    public static Matrix detReduxMatrix (Matrix inMatrix) {
+        Matrix onMatrix;
+        onMatrix = inMatrix;
+
+        if (onMatrix.countElement() == 1) {
+            return inMatrix;
+        } 
+        // Matriks bukan berukuran 1 x 1
+        for (int i = 0; i < onMatrix.getColumnLength() - 1; i++) {
+            if (onMatrix.getElement(i+1, i+1) == 0) {
+                for (int search_index = i+1; search_index < onMatrix.getRowLength(); search_index++) {
+                    if (onMatrix.getElement(search_index+1, i+1) != 0) {
+                        onMatrix.swapRow(i+1, search_index+1);
+                        break;
+                    }
+                }
+            }
+            for (int j = i+1; j < onMatrix.getRowLength(); j++) {
+                
+                double zero = onMatrix.makeZero(onMatrix.getElement(j+1, i+1), onMatrix.getElement(i+1, i+1));
+                
+                onMatrix.OBE(i, j, zero);
+            }
+        }
+
+        return onMatrix;
     }
 }

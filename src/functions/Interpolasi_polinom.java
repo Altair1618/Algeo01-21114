@@ -1,12 +1,21 @@
+
 package functions;
+import java.util.Scanner;
 import dataStructure.*;
 import utility.Operations;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class Interpolasi_polinom {
-	public static Matrix interpolasi(Matrix givenData) {
-		int n= givenData.getCountPoint();
+	public static void interpolasi() {
+		System.out.print("Masukkan jumlah titik (n): ");
+		Scanner inputN = new Scanner(System.in);
+		int n = inputN.nextInt();
+		Point[] tabPoint = new Point[n];
+		for (int i=0; i<n; i++) {
+			tabPoint[i] = new Point();
+			tabPoint[i].setAbsis(inputN.nextDouble());
+			tabPoint[i].setOrdinat(inputN.nextDouble());
+		}
+		
 		// Buat matrix A (koefisien) dan B (hasil persamaan)
 		Matrix A = new Matrix();
 		A.createMatrix(n, n);
@@ -16,12 +25,12 @@ public class Interpolasi_polinom {
 		// Isi matrix A dan B
 		for (int i=1; i<=n; i++) {
 			for (int j=1; j<=n; j++) {
-				A.setElement(Math.pow(givenData.getElement(i, 1), j-1), i, j);
+				A.setElement(Math.pow(tabPoint[i-1].getPointAbsis(), j-1), i, j);
 			}
 		}
 		
 		for (int i=1; i<=n; i++) {
-			B.setElement(givenData.getElement(i, 2), i, 1);
+			B.setElement(tabPoint[i-1].getPointOrdinat(), i, 1);
 		}
 		
 		//temp = inverse(A)
@@ -33,23 +42,21 @@ public class Interpolasi_polinom {
 		Matrix solution = new Matrix();
 		solution.createMatrix(n, 1);
 		solution = Operations.multiplyMatrix(temp, B);
-		solution.roundMatElmt(5);
-		solution.writeMatrix();
-		return solution;
-	}
-	
-	public static void displayPolinom(Matrix solution) {
-		int n = solution.getRowLength();
+		
+		// Display fungsi polinomial
 		System.out.println("Fungsi polinomial: ");
 		System.out.printf("f(x) = ");
 		if (solution.getElement(1, 1) != 0) {
 			System.out.print(solution.getElement(1, 1) + " ");
+			//System.out.printf("%f ", solution.getElement(1, 1));
 		}
 		if (solution.getElement(2, 1) > 0) {
 			System.out.print("+ (" + solution.getElement(2, 1) + ")x ");
+			//System.out.printf("+ (%f)x ", solution.getElement(2, 1));
 		}
 		else if (solution.getElement(2, 1) < 0) {
 			System.out.print("- (" + (-solution.getElement(2, 1)) + ")x ");
+			//System.out.printf("- (%f)x ", -solution.getElement(2, 1));
 		}
 		
 		for (int i=3; i<=n; i++) {
@@ -58,40 +65,93 @@ public class Interpolasi_polinom {
 			}
 			if (solution.getElement(i, 1) > 0) {
 				System.out.print("+ (" + solution.getElement(i, 1) + ")x^" + (i-1) + " ");
+				//System.out.printf("+ (%f)x^%d ", solution.getElement(i, 1), i-1);
 			}
 			else if (solution.getElement(i, 1) < 0) {
 				System.out.print("- (" + (-solution.getElement(i, 1)) + ")x^" + (i-1) + " ");
+				//System.out.printf("- (%f)x^%d ", -solution.getElement(i, 1), i-1);
 			}
 		}
 		System.out.println();
-	}
-	
-	public static void displayValueOfFx(Matrix solution, Matrix findValueOf) {
-		double result;
-		double x;
-		int n = findValueOf.getCountPoint();
-		for (int i=1; i<=n; i++) {
-			result =0;
-			x=findValueOf.getElement(i, 1);
-			for (int j=1; j<=solution.getRowLength(); j++) {
-				result += solution.getElement(j, 1)*Math.pow(x, j-1);
-			}
-			result = BigDecimal.valueOf(result).setScale(5, RoundingMode.HALF_UP).doubleValue();
-			System.out.println("f(" + x + ") = " + result);
+		
+		while (true) {
+			// Terima input x yang akan diaproksimasi
+			System.out.print("Masukkan nilai x yang akan diaproksimasi: ");
+			double x = inputN.nextDouble();
 			
+			// Hitung nilai f(x)
+			double result =0;
+			
+			for (int i=1; i<=n; i++) {
+				result += solution.getElement(i, 1) * Math.pow(x, i-1);
+			}
+			
+			// Tampilkan f(x)
+			System.out.print("f(" + x + ") = " + result);
+			System.out.println();
+			//System.out.printf("f(%f) = %f\n", x, result);
+			
+			System.out.print("Lanjutkan? (Y/N): ");
+			String opsi = inputN.next();
+			while (!(opsi.equals("Y")) && !(opsi.equals("N"))) {
+				System.out.print("Masukkan salah! Ulangi (Y/N): ");
+				opsi = inputN.next();
+			}
+			if (opsi.equals("N")) {
+				break;
+			}
 		}
+		/*
+		Matrix augmentedMatrix = new Matrix();
+		augmentedMatrix.createMatrix(n, n+1);
+		for (int i=1; i<=n; i++) {
+			for (int j=1; j<=n; j++) {
+				augmentedMatrix.setElement(Math.pow(tabPoint[i-1].x, j-1), i, j);
+			}
+		}
+		for (int i=1; i<=n; i++) {
+			augmentedMatrix.setElement(tabPoint[i-1].y, i, n+1);
+		} 
+		
+		double[] solution = Cramer.cramerSPL(augmentedMatrix, n); 
+		 */
+		
+		/*
+		System.out.printf("f(x) = %f", solution[0]);
+		System.out.printf(" + (%f)x", solution[1]);
+		for (int i=2; i<n; i++) {
+			System.out.printf (" + (%f)x^%d ", solution[i], i);
+		}
+		
+		
+		System.out.println();
+		
+		while (true) {
+			System.out.print("Masukkan nilai x yang akan diaproksimasi: ");
+			inputN = new Scanner(System.in);
+			double x = inputN.nextDouble();
+			double result =0;
+			
+			for (int i=0; i<n; i++) {
+				result += solution[i]*Math.pow(x, i);
+			}
+			
+			System.out.printf("Nilai f(%f) = %f \n", x, result);
+			System.out.print("Lanjutkan? (Y/N): ");
+			
+			String opsi = inputN.next();
+			if (opsi.equals("N")) {
+				break;
+			}
+			
+		}		 
+		 */
+		//Display persamaan polinomial
+
+		inputN.close();
+		
+		
 	}
-		
-		
 	
-	public static void main(String[] args) {
-		Matrix diket = new Matrix();
-		diket.readMatrix();
-		Matrix cari = new Matrix();
-		cari.readMatrix();
-		
-		displayPolinom(interpolasi(diket));
-		displayValueOfFx(interpolasi(diket), cari);
-	}
 	
 }

@@ -7,14 +7,7 @@ import dataStructure.*;
 public class Determinant {
 	static final double UNDEF_DET = -9999.99;
 
-	//main buat ngetest
-	public static void main(String[] args) {
-		Matrix nice = new Matrix();
-		nice.readMatrix();
-		System.out.println(detExCof(nice, nice.getRowLength()));
-	}
-
-	static double detExCof(Matrix m, int size) {
+	public static double detExCof(Matrix m, int size) {
 		if (m.isSquare()) {
 			if (size==1) {
 				return (m.getElement(1, 1));

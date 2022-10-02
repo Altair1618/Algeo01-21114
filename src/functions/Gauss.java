@@ -2,7 +2,8 @@ package functions;
 
 import dataStructure.*;
 import utility.*;
-
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class Gauss {
@@ -134,6 +135,7 @@ public class Gauss {
             for (int col = 0; col < m.getColumnLength() - 1; col++) {
                 if (m.getElement(row + 1, col + 1) == 1) {
                     param[col] = false;
+                    break;
                 }
             }
         }
@@ -196,7 +198,6 @@ public class Gauss {
         // System.out.println(Arrays.toString(neffsv));
 
         // OUTPUT Solusi SPL
-        System.out.println("Solusi SPL:");
         for (int sol = 0; sol < m.getColumnLength() - 1; sol++) {
             boolean adanum = false;
 
@@ -220,7 +221,7 @@ public class Gauss {
                         System.out.print((-1) * solusinum[sol][v + 1]);
                     }
                     System.out.printf("%c ", solusivar[sol][v]);
-                } else {
+                } else if (solusinum[sol][v + 1] > 0) {
                     if (v != 0 || adanum) {
                         System.out.print("+ ");
                     }
@@ -234,6 +235,158 @@ public class Gauss {
             }
 
             System.out.println();
+        }
+    }
+
+    public static void writeSPLFile(FileWriter fileWriter, Matrix m, String filePath) {
+        try {
+                // Inisialisasi huruf untuk variabel dan indeks huruf yang digunakan
+                String var = "abcdefghijklmnopqrstuvwxyz";
+                int ivar = 0;
+
+                // Inisialisasi Array
+                double[][] solusinum = new double[m.getColumnLength() - 1][m.getColumnLength() - 1];
+                int[] neffsn = new int[m.getColumnLength() - 1];
+                char[][] solusivar = new char[m.getColumnLength() - 1][m.getColumnLength() - 1];
+                int[] neffsv = new int[m.getColumnLength() - 1];
+                boolean[] param = new boolean[m.getColumnLength() - 1];
+                Arrays.fill(param, true);
+                Arrays.fill(neffsn, 1);
+
+                // Mengecek  apakah SPL memiliki solusi
+                boolean hasSolution = false;
+                for (int row = m.getRowLength() - 1; row >= 0; row--) {
+                    for (int col = 0; col < m.getColumnLength(); col++) {
+                        // Mengecek apakah ada 1 utama pada suatu baris
+                        if (m.getElement(row + 1, col + 1) == 1 && col != m.getColumnLength() - 1) {
+                            hasSolution = true;
+                            break;
+                        }
+
+                        // Jika masih tidak ditemukan 1 utama namun terdapat nilai pada
+                        // kolom terkanan maka SPL tidak memiliki solusi
+                        if (m.getElement(row + 1, col + 1) != 0 && col == m.getColumnLength() - 1) {
+                            fileWriter.write("SPL tidak memiliki solusi\n");
+                            return;
+                        }
+                    }
+                    if (hasSolution) {
+                        break;
+                    }
+                }
+                
+                // Mengecek variabel mana yang akan menjadi parameter
+                for (int row = 0; row < m.getRowLength(); row++) {
+                    for (int col = 0; col < m.getColumnLength() - 1; col++) {
+                        if (m.getElement(row + 1, col + 1) == 1) {
+                            param[col] = false;
+                        }
+                    }
+                }
+
+                // Mengassign variabel pada parameter
+                for (int col = 0; col < m.getColumnLength() - 1; col++) {
+                    if (param[col]) {
+                        solusinum[col][neffsn[col]] = 1.0;
+                        solusivar[col][neffsv[col]] = var.charAt(ivar);
+                        ivar++;
+                        neffsn[col]++;
+                        neffsv[col]++;
+                    }
+                }
+
+                // Mencari solusi untuk setiap variabel
+                for (int row = m.getRowLength() - 1; row >= 0; row--) {
+                    for (int col = 0; col < m.getColumnLength() - 1; col++) {
+                        if (m.getElement(row + 1, col + 1) == 1) {
+                            // Inisialisasi hasil dengan nilai pada kolom paling kanan
+                            solusinum[col][0] = m.getElement(row + 1, m.getColumnLength());
+
+                            // Menyelesaikan persamaan linear pada suatu baris
+                            for (int nextcol = col + 1; nextcol < m.getColumnLength() - 1; nextcol++) {
+                                // Mengurangi solusi yang berupa konstanta
+                                solusinum[col][0] -= m.getElement(row + 1, nextcol + 1) * solusinum[nextcol][0];
+                                if (neffsn[nextcol] > 1) {
+                                    for (int i = 0; i < neffsv[nextcol]; i++) {
+                                        int idx = -1;
+                                        for (int j = 0; j < neffsn[nextcol]; j++) {
+                                            if (solusivar[nextcol][i] == solusivar[col][j]) {
+                                                idx = j;
+                                                break;
+                                            }
+                                        }
+
+                                        double temp = (-1) * m.getElement(row+1, nextcol+1) * solusinum[nextcol][i+1];
+                                        if (idx == -1) {
+                                            if (m.getElement(row+1, nextcol+1) != 0) {
+                                                solusivar[col][neffsv[col]] = solusivar[nextcol][i];
+                                                neffsv[col]++;
+                                                solusinum[col][neffsn[col]] = temp;
+                                                neffsn[col]++;
+                                            }
+                                        } else {
+                                            solusinum[col][idx + 1] += temp;
+                                        }
+                                    }
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+                // System.out.println(Arrays.deepToString(solusinum));
+                // System.out.println(Arrays.toString(neffsn));
+                // System.out.println(Arrays.deepToString(solusivar));
+                // System.out.println(Arrays.toString(neffsv));
+
+                // OUTPUT Solusi SPL
+                for (int sol = 0; sol < m.getColumnLength() - 1; sol++) {
+                    boolean adanum = false;
+
+                    fileWriter.write("x");
+                    fileWriter.write(String.valueOf(sol + 1));
+                    fileWriter.write(" = ");
+                    if (solusinum[sol][0] != 0) {
+                        adanum = true;
+                        fileWriter.write(String.valueOf(solusinum[sol][0]));
+                        fileWriter.write(" ");
+                    } else if (solusinum[sol][0] == 0 && neffsv[sol] == 0) {
+                        fileWriter.write(String.valueOf(solusinum[sol][0]));
+                        fileWriter.write(" ");
+                    }
+
+                    for (int v = 0; v < neffsv[sol]; v++) {
+                        if (solusinum[sol][v + 1] < 0) {
+                            if (v == 0 && !adanum) {
+                                fileWriter.write("-");
+                            } else {
+                                fileWriter.write("- ");
+                            }
+
+                            if (solusinum[sol][v + 1] != -1) {
+                                fileWriter.write(String.valueOf((-1) * solusinum[sol][v + 1]));
+                            }
+                            fileWriter.write(String.valueOf(solusivar[sol][v]));
+                        } else if (solusinum[sol][v + 1] > 0) {
+                            if (v != 0 || adanum) {
+                                fileWriter.write("+ ");
+                            }
+
+                            if (solusinum[sol][v + 1] != 1) {
+                                fileWriter.write(String.valueOf(solusinum[sol][v + 1]));
+                            }
+
+                            fileWriter.write(String.valueOf(solusivar[sol][v]));
+                        }
+                    }
+
+                    fileWriter.write("\n");
+                }
+            System.out.println("Output telah tersedia pada File.");
+        } catch (IOException e) {
+            System.out.println("Terjadi kesalahan.");
         }
     }
 
@@ -271,25 +424,22 @@ public class Gauss {
         return res;
     }
 
-    public static void main(String[] args) {
-		// Matrix m = new Matrix();
-        // m.readMatrix();
+    public static Matrix identityMatrix (Matrix m) {
+        Matrix em = new Matrix();
+        em.createMatrix(m.getRowLength(), m.getColumnLength());
 
+        for (int i = 0; i < m.getRowLength(); i++) {
+            for (int j = 0; j < m.getColumnLength(); j++) {
+                if (i == j) {
+                    em.setElement(1, i + 1, j + 1);
+                } else {
+                    em.setElement(0, i + 1, j + 1);
+                }
+            }
+        }
 
-        // m = matrixGaussJordan(m);
-        // System.out.println("\nMatriks Hasil\n");
-        // m.writeMatrix();
-        // System.out.println();
-
-        // Inverse.inverse(m, 2);
-        // m = inverseGauss(m);
-        // m.writeMatrix();
-
-        // m = inverseGauss(m);
-        // m.writeMatrix();
-
-        // m = matrixGauss(m);
-
-        // solveSPL(m);
+        return em;
     }
+
+
 }
