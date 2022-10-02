@@ -12,7 +12,14 @@ public class Point {
         this.x = input.nextDouble();
         System.out.print("Masukkan ordinat titik: ");
         this.y = input.nextDouble();
-        input.close();
+    }
+
+    public void setAbsis (double val) {
+        this.x = val;
+    }
+
+    public void setOrdinat (double val) {
+        this.y = val;
     }
 
     //FUNGSI SELEKTOR
