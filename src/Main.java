@@ -17,7 +17,7 @@ public class Main {
 			System.out.println("4. Interpolasi Polinom");
 			System.out.println("5. Interpolasi Bicubic");
 			System.out.println("6. Regresi Linear Berganda");
-			System.out.println("7. Image Scalling");
+			System.out.println("7. Image Scaling");
 			System.out.println("8. Keluar");
 			System.out.print("Pilihan Anda: ");
 		} else if (command == "menuSPL") {
@@ -45,10 +45,16 @@ public class Main {
 			System.out.println("1. Metode Reduksi Baris");
 			System.out.println("2. Metode Ekspansi Kofaktor");
 			System.out.print("Pilihan Anda: ");
+		} else if (command == "menuInvers") {
+			System.out.println("Penentuan Nilai Matriks Invers");
+			System.out.println("Pilih metode perhitungan:");
+			System.out.println("1. Metode Gauss");
+			System.out.println("2. Metode Ekspansi Kofaktor");
+			System.out.print("Pilihan Anda: ");
 		}
 		
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Scanner input = new Scanner(System.in);
 		Scanner inputStr = new Scanner(System.in);
 		
@@ -126,7 +132,87 @@ public class Main {
 						Gauss.solveSPL(outputMatrixGauss);
 						System.out.println("----------------------------------");
 					} else /*inputMenu3 == 2*/ {
+						System.out.print("Masukkan nama file (dengan extension): ");
+						String fileName = inputStr.nextLine();
 
+						String absolutePath = ".\\output\\" + fileName;
+						try {
+							File filePath = new File(absolutePath);
+							if (filePath.createNewFile()) {
+								System.out.println("File telah dibuat: " + fileName);
+								try {
+									String line;
+									try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+										fileWriter.write("----------------------------------\n");
+										fileWriter.write("HASIL PERHITUNGAN\n");
+										fileWriter.write("1. Matriks Gauss\n");
+
+										for (int i = 0; i < outputMatrixGauss.getRowLength(); i++) {
+											line = "";
+											for (int j = 0 ; j < outputMatrixGauss.getColumnLength()-1; j++) {
+												line += String.valueOf(outputMatrixGauss.getElement(i+1, j+1));
+												line += " ";
+											}
+											line += String.valueOf(outputMatrixGauss.getElement(i+1, outputMatrixGauss.getColumnLength()));
+											line += "\n";
+											fileWriter.write(line);
+										}
+
+										fileWriter.write("2. Hasil Penyelesaian\n");
+										Gauss.writeSPLFile(fileWriter, outputMatrixGauss, absolutePath);
+										fileWriter.write("----------------------------------\n");
+									}
+									System.out.print("");
+								} catch (IOException e) {
+									System.out.print("");
+								}
+							} else {
+								System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+								int choiceScanner = input.nextInt();
+			
+								while (choiceScanner != 1 && choiceScanner != 2) {
+									choiceScanner = input.nextInt();
+								}
+			
+								if (choiceScanner == 1) {
+									filePath.delete();
+									System.out.println("Menghapus file " + fileName + "...");
+									filePath.createNewFile(); 
+									System.out.println("File baru telah dibuat: " + fileName);
+							
+									try {
+										String line;
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Matriks Gauss\n");
+
+											for (int i = 0; i < outputMatrixGauss.getRowLength(); i++) {
+												line = "";
+												for (int j = 0 ; j < outputMatrixGauss.getColumnLength()-1; j++) {
+													line += String.valueOf(outputMatrixGauss.getElement(i+1, j+1));
+													line += " ";
+												}
+												line += String.valueOf(outputMatrixGauss.getElement(i+1, outputMatrixGauss.getColumnLength()));
+												line += "\n";
+												fileWriter.write(line);
+											}
+
+											fileWriter.write("2. Hasil Penyelesaian\n");
+											Gauss.writeSPLFile(fileWriter, outputMatrixGauss, absolutePath);
+											fileWriter.write("----------------------------------\n");
+										}
+										System.out.print("");
+									} catch (IOException e) {
+										System.out.print("");
+									}
+								} else {
+									System.out.print("");
+								}
+							}
+						} catch (IOException e) {
+							System.out.print(""); 
+						}
 					}
 				} else if (inputMenu1 == 2) {
 					System.out.println("PENYELESAIAN MATRIX MENGGUNAKAN METODE GAUSS-JORDAN");
@@ -183,7 +269,87 @@ public class Main {
 						Gauss.solveSPL(outputMatrixGaussJordan);
 						System.out.println("----------------------------------");
 					} else /*inputMenu3 == 2*/ {
+						System.out.print("Masukkan nama file (dengan extension): ");
+						String fileName = inputStr.nextLine();
 
+						String absolutePath = ".\\output\\" + fileName;
+						try {
+							File filePath = new File(absolutePath);
+							if (filePath.createNewFile()) {
+								System.out.println("File telah dibuat: " + fileName);
+								try {
+									String line;
+									try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+										fileWriter.write("----------------------------------\n");
+										fileWriter.write("HASIL PERHITUNGAN\n");
+										fileWriter.write("1. Matriks Gauss-Jordan\n");
+
+										for (int i = 0; i < outputMatrixGaussJordan.getRowLength(); i++) {
+											line = "";
+											for (int j = 0 ; j < outputMatrixGaussJordan.getColumnLength()-1; j++) {
+												line += String.valueOf(outputMatrixGaussJordan.getElement(i+1, j+1));
+												line += " ";
+											}
+											line += String.valueOf(outputMatrixGaussJordan.getElement(i+1, outputMatrixGaussJordan.getColumnLength()));
+											line += "\n";
+											fileWriter.write(line);
+										}
+
+										fileWriter.write("2. Hasil Penyelesaian\n");
+										Gauss.writeSPLFile(fileWriter, outputMatrixGaussJordan, absolutePath);
+										fileWriter.write("----------------------------------\n");
+									}
+									System.out.print("");
+								} catch (IOException e) {
+									System.out.print("");
+								}
+							} else {
+								System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+								int choiceScanner = input.nextInt();
+			
+								while (choiceScanner != 1 && choiceScanner != 2) {
+									choiceScanner = input.nextInt();
+								}
+			
+								if (choiceScanner == 1) {
+									filePath.delete();
+									System.out.println("Menghapus file " + fileName + "...");
+									filePath.createNewFile(); 
+									System.out.println("File baru telah dibuat: " + fileName);
+							
+									try {
+										String line;
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Matriks Gauss-Jordan\n");
+
+											for (int i = 0; i < outputMatrixGaussJordan.getRowLength(); i++) {
+												line = "";
+												for (int j = 0 ; j < outputMatrixGaussJordan.getColumnLength()-1; j++) {
+													line += String.valueOf(outputMatrixGaussJordan.getElement(i+1, j+1));
+													line += " ";
+												}
+												line += String.valueOf(outputMatrixGaussJordan.getElement(i+1, outputMatrixGaussJordan.getColumnLength()));
+												line += "\n";
+												fileWriter.write(line);
+											}
+
+											fileWriter.write("2. Hasil Penyelesaian\n");
+											Gauss.writeSPLFile(fileWriter, outputMatrixGaussJordan, absolutePath);
+											fileWriter.write("----------------------------------\n");
+										}
+										System.out.print("");
+									} catch (IOException e) {
+										System.out.print("");
+									}
+								} else {
+									System.out.print("");
+								}
+							}
+						} catch (IOException e) {
+							System.out.print(""); 
+						}
 					}
 				} else if (inputMenu1 == 3) {
 					System.out.println("PENYELESAIAN MATRIX MENGGUNAKAN METODE MATRIKS BALIKAN");
@@ -252,7 +418,63 @@ public class Main {
 							Inverse.displayInvSPLResult(Inverse.inverseSPL(matrixinput, matrixinput.getColumnLength()-1));
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan nama file (dengan extension): ");
+							String fileName = inputStr.nextLine();
 
+							String absolutePath = ".\\output\\" + fileName;
+							try {
+								File filePath = new File(absolutePath);
+								if (filePath.createNewFile()) {
+									System.out.println("File telah dibuat: " + fileName);
+									try {
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Matrix Inverse\n");
+											Inverse.writeInverse(fileWriter, outputMatrixInverse);
+											fileWriter.write("2. Hasil Penyelesaian\n");
+											Inverse.writeInvSPLResult(fileWriter, Inverse.inverseSPL(matrixinput, matrixinput.getColumnLength()-1));
+											fileWriter.write("----------------------------------\n");
+										}
+										System.out.print("");
+									} catch (IOException e) {
+										System.out.print("Terjadi Kesalahan");
+									}
+								} else {
+									System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+									int choiceScanner = input.nextInt();
+				
+									while (choiceScanner != 1 && choiceScanner != 2) {
+										choiceScanner = input.nextInt();
+									}
+				
+									if (choiceScanner == 1) {
+										filePath.delete();
+										System.out.println("Menghapus file " + fileName + "...");
+										filePath.createNewFile(); 
+										System.out.println("File baru telah dibuat: " + fileName);
+								
+										try {
+											try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+												fileWriter.write("----------------------------------\n");
+												fileWriter.write("HASIL PERHITUNGAN\n");
+												fileWriter.write("1. Matrix Inverse\n");
+												Inverse.writeInverse(fileWriter, outputMatrixInverse);
+												fileWriter.write("2. Hasil Penyelesaian\n");
+												Inverse.writeInvSPLResult(fileWriter, Inverse.inverseSPL(matrixinput, matrixinput.getColumnLength()-1));
+												fileWriter.write("----------------------------------\n");
+											}
+											System.out.print("");
+										} catch (IOException e) {
+											System.out.print("Terjadi Kesalahan");
+										}
+									} else {
+										System.out.print("Aksi dibatalkan");
+									}
+								}
+							} catch (IOException e) {
+								System.out.print("Terjadi kesalahan"); 
+							}
 						}
 					}
 				} else /*inputMenu1 == 4*/ {
@@ -308,7 +530,59 @@ public class Main {
 							Cramer.displaySPLCramerResult(Cramer.cramerSPL(matrixinput, matrixinput.getColumnLength()-1));
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan nama file (dengan extension): ");
+							String fileName = inputStr.nextLine();
 
+							String absolutePath = ".\\output\\" + fileName;
+							try {
+								File filePath = new File(absolutePath);
+								if (filePath.createNewFile()) {
+									System.out.println("File telah dibuat: " + fileName);
+									try {
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Hasil Penyelesaian\n");
+											Cramer.writeSPLCramerResult(fileWriter, Cramer.cramerSPL(matrixinput, matrixinput.getColumnLength()-1));
+											fileWriter.write("----------------------------------\n");
+										}
+										System.out.print("");
+									} catch (IOException e) {
+										System.out.print("Terjadi Kesalahan");
+									}
+								} else {
+									System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+									int choiceScanner = input.nextInt();
+				
+									while (choiceScanner != 1 && choiceScanner != 2) {
+										choiceScanner = input.nextInt();
+									}
+				
+									if (choiceScanner == 1) {
+										filePath.delete();
+										System.out.println("Menghapus file " + fileName + "...");
+										filePath.createNewFile(); 
+										System.out.println("File baru telah dibuat: " + fileName);
+								
+										try {
+											try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+												fileWriter.write("----------------------------------\n");
+												fileWriter.write("HASIL PERHITUNGAN\n");
+												fileWriter.write("1. Hasil Penyelesaian\n");
+												Cramer.writeSPLCramerResult(fileWriter, Cramer.cramerSPL(matrixinput, matrixinput.getColumnLength()-1));
+												fileWriter.write("----------------------------------\n");
+											}
+											System.out.print("");
+										} catch (IOException e) {
+											System.out.print("Terjadi Kesalahan");
+										}
+									} else {
+										System.out.print("Aksi dibatalkan");
+									}
+								}
+							} catch (IOException e) {
+								System.out.print("Terjadi kesalahan"); 
+							}
 						}
 					}
 				}
@@ -378,7 +652,77 @@ public class Main {
 							System.out.println(detRedux.detByReduction(matrixinput));
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
-							
+							System.out.print("Masukkan nama file (dengan extension): ");
+							String fileName = inputStr.nextLine();
+
+							String absolutePath = ".\\output\\" + fileName;
+							try {
+								File filePath = new File(absolutePath);
+								if (filePath.createNewFile()) {
+									System.out.println("File telah dibuat: " + fileName);
+									try {
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Hasil Reduksi Baris\n");
+											for (int i = 0; i < reduMatrix.getRowLength(); i++) {
+												for (int j = 0; j < reduMatrix.getColumnLength()-1; j++) {
+													fileWriter.write(String.valueOf(reduMatrix.getElement(i+1, j+1)));
+													fileWriter.write(" ");
+												}
+												fileWriter.write(String.valueOf(reduMatrix.getElement(i+1, reduMatrix.getColumnLength())));
+												fileWriter.write("\n");
+											}
+											fileWriter.write("2. Nilai Determinan = ");
+											fileWriter.write(String.valueOf(detRedux.detByReduction(matrixinput)));
+											fileWriter.write("\n");
+											fileWriter.write("----------------------------------\n");
+										}
+										System.out.print("Output telah tersedia pada file\n");
+									} catch (IOException e) {
+										System.out.print("Terjadi Kesalahan\n");
+									}
+								} else {
+									System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+									int choiceScanner = input.nextInt();
+				
+									while (choiceScanner != 1 && choiceScanner != 2) {
+										choiceScanner = input.nextInt();
+									}
+				
+									if (choiceScanner == 1) {
+										filePath.delete();
+										System.out.println("Menghapus file " + fileName + "...");
+										filePath.createNewFile(); 
+										System.out.println("File baru telah dibuat: " + fileName);
+								
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Hasil Reduksi Baris\n");
+											for (int i = 0; i < reduMatrix.getRowLength(); i++) {
+												for (int j = 0; j < reduMatrix.getColumnLength()-1; j++) {
+													fileWriter.write(String.valueOf(reduMatrix.getElement(i+1, j+1)));
+													fileWriter.write(" ");
+												}
+												fileWriter.write(String.valueOf(reduMatrix.getElement(i+1, reduMatrix.getColumnLength())));
+												fileWriter.write("\n");
+											}
+											fileWriter.write("2. Nilai Determinan = ");
+											fileWriter.write(String.valueOf(detRedux.detByReduction(matrixinput)));
+											fileWriter.write("\n");
+											fileWriter.write("----------------------------------\n");
+											System.out.print("Output telah tersedia pada file\n");
+										} catch (IOException e) {
+											System.out.print("Terjadi Kesalahan\n");
+										}
+									} else {
+										System.out.print("Aksi dibatalkan");
+									}
+								}
+							} catch (IOException e) {
+								System.out.print("Terjadi kesalahan"); 
+							}
 						}
 					}
 				} else /*inputMenu1 == 2*/ {
@@ -434,76 +778,345 @@ public class Main {
 							System.out.println(Determinant.detExCof(matrixinput, matrixinput.getColumnLength()));
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
-							
+							System.out.print("Masukkan nama file (dengan extension): ");
+							String fileName = inputStr.nextLine();
+
+							String absolutePath = ".\\output\\" + fileName;
+							try {
+								File filePath = new File(absolutePath);
+								if (filePath.createNewFile()) {
+									System.out.println("File telah dibuat: " + fileName);
+									try {
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Nilai Determinan = ");
+											fileWriter.write(String.valueOf(Determinant.detExCof(matrixinput, matrixinput.getColumnLength())));
+											fileWriter.write("\n");
+											fileWriter.write("----------------------------------\n");
+										}
+										System.out.print("Output telah tersedia pada file\n");
+									} catch (IOException e) {
+										System.out.print("Terjadi Kesalahan\n");
+									}
+								} else {
+									System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+									int choiceScanner = input.nextInt();
+				
+									while (choiceScanner != 1 && choiceScanner != 2) {
+										choiceScanner = input.nextInt();
+									}
+				
+									if (choiceScanner == 1) {
+										filePath.delete();
+										System.out.println("Menghapus file " + fileName + "...");
+										filePath.createNewFile(); 
+										System.out.println("File baru telah dibuat: " + fileName);
+								
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Nilai Determinan = ");
+											fileWriter.write(String.valueOf(Determinant.detExCof(matrixinput, matrixinput.getColumnLength())));
+											fileWriter.write("\n");
+											fileWriter.write("----------------------------------\n");
+											System.out.print("Output telah tersedia pada file\n");
+										} catch (IOException e) {
+											System.out.print("Terjadi Kesalahan\n");
+										}
+									} else {
+										System.out.print("Aksi dibatalkan");
+									}
+								}
+							} catch (IOException e) {
+								System.out.print("Terjadi kesalahan"); 
+							}
 						}
 					}
 				}
 			} else if (inputMenu == 3) {
-				System.out.println("MENCARI INVERS MATRIKS");
-				Matrix matrixinput = new Matrix();
-				mainMenu("menuRead");
-				int inputMenu2 = input.nextInt();
-				while (inputMenu2 != 1 && inputMenu2 != 2) {
-					System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
+				mainMenu("menuInvers");
+				int inputMenu1 = input.nextInt();
+				while (inputMenu1 != 1 && inputMenu1 != 2) {
+					System.out.println("Masukkan salah! Masukkan input yang valid");
 					System.out.print("Pilihan Anda: ");
-					inputMenu2 = input.nextInt();
-				} // inputMenu2 == 1 || inputMenu2 == 2
+					inputMenu1 = input.nextInt();
+				} // inputMenu1 == 1 || inputMenu1 == 2
+				if (inputMenu1 == 1) {
+					System.out.println("INVERS MATRIKS MENGGUNAKAN METODE GAUSS");
+					Matrix matrixinput = new Matrix();
+					mainMenu("menuRead");
+					int inputMenu2 = input.nextInt();
+					while (inputMenu2 != 1 && inputMenu2 != 2) {
+						System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
+						System.out.print("Pilihan Anda: ");
+						inputMenu2 = input.nextInt();
+					} // inputMenu2 == 1 || inputMenu2 == 2
 
-				if (inputMenu2 == 1) {
-					int row, column;
-					System.out.print("Masukkan jumlah baris: ");
-					row = input.nextInt();
-					System.out.print("Masukkan jumlah kolom: ");
-					column = input.nextInt();
-					matrixinput.createMatrix(row, column);
-					double inputitem;
+					if (inputMenu2 == 1) {
+						int row, column;
+						System.out.print("Masukkan jumlah baris: ");
+						row = input.nextInt();
+						System.out.print("Masukkan jumlah kolom: ");
+						column = input.nextInt();
+						matrixinput.createMatrix(row, column);
+						double inputitem;
+
+						for (int i = 0; i < matrixinput.getRowLength(); i++) {
+							for (int j = 0; j < matrixinput.getColumnLength(); j++) {
+								inputitem = input.nextDouble();
+								matrixinput.setElement(inputitem, i+1, j+1);
+							}
+						}
+					} else /*inputMenu2 == 2*/ {
+						System.out.print("Masukkan file path: ");
+						String filePath;
+						filePath = inputStr.nextLine();
+						matrixinput.readMatrixFromFile(filePath);
+					}
+
+					if (matrixinput.getColumnLength() != matrixinput.getRowLength()) {
+						System.out.println("Matriks variabel yang tidak berbentuk persegi tidak memiliki invers.");
+					} else {
+						Matrix matrixInverseGauss = new Matrix();
+						matrixInverseGauss = Gauss.inverseGauss(matrixinput);
+
+						Matrix matrixIdentity = new Matrix();
+						matrixIdentity = Gauss.identityMatrix(matrixinput);
+
+						if (detRedux.detByReduction(matrixinput) == 0) {
+							System.out.println("Matriks tidak memiliki invers");
+						} else {
+							mainMenu("menuWrite"); 
+						int inputMenu3;
+						inputMenu3 = input.nextInt();
+
+						while (inputMenu3 != 1 && inputMenu3 != 2) {
+							System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
+							System.out.print("Pilihan Anda: ");
+							inputMenu3 = input.nextInt();
+						} // inputMenu3 == 1 || inputMenu3 == 2
+
+						if (inputMenu3 == 1) {
+							System.out.println("----------------------------------");
+							System.out.println("HASIL PERHITUNGAN");
+							System.out.println("1. Matrix Invers");
+							for (int i = 0; i < matrixInverseGauss.getRowLength(); i++) {
+								for (int j = 0; j < matrixInverseGauss.getColumnLength()-1; j++) {
+									System.out.print(matrixIdentity.getElement(i+1, j+1));
+									System.out.print(" ");
+								}
+								System.out.print(matrixIdentity.getElement(i+1, matrixInverseGauss.getColumnLength()));
+								System.out.print(" | ");
+								for (int j = 0; j < matrixInverseGauss.getColumnLength()-1; j++) {
+									System.out.print(matrixInverseGauss.getElement(i+1, j+1));
+									System.out.print(" ");
+								}
+								System.out.println(matrixInverseGauss.getElement(i+1, matrixInverseGauss.getColumnLength()));
+							}
+							System.out.println("----------------------------------");
+						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan nama file (dengan extension): ");
+							String fileName = inputStr.nextLine();
+
+							String absolutePath = ".\\output\\" + fileName;
+							try {
+								File filePath = new File(absolutePath);
+								if (filePath.createNewFile()) {
+									System.out.println("File telah dibuat: " + fileName);
+									try {
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											System.out.println("1. Matrix Invers\n");
+											for (int i = 0; i < matrixInverseGauss.getRowLength(); i++) {
+												for (int j = 0; j < matrixInverseGauss.getColumnLength()-1; j++) {
+													fileWriter.write(String.valueOf(matrixIdentity.getElement(i+1, j+1)));
+													fileWriter.write(" ");
+												}
+												fileWriter.write(String.valueOf(matrixIdentity.getElement(i+1, matrixInverseGauss.getColumnLength())));
+												fileWriter.write(" | ");
+												for (int j = 0; j < matrixInverseGauss.getColumnLength()-1; j++) {
+													fileWriter.write(String.valueOf(matrixInverseGauss.getElement(i+1, j+1)));
+													fileWriter.write(" ");
+												}
+												fileWriter.write(String.valueOf(matrixInverseGauss.getElement(i+1, matrixInverseGauss.getColumnLength())));
+												fileWriter.write("\n");
+											}
+											System.out.println("----------------------------------\n");
+										}
+										System.out.print("");
+									} catch (IOException e) {
+										System.out.print("Terjadi Kesalahan");
+									}
+								} else {
+									System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+									int choiceScanner = input.nextInt();
+				
+									while (choiceScanner != 1 && choiceScanner != 2) {
+										choiceScanner = input.nextInt();
+									}
+				
+									if (choiceScanner == 1) {
+										filePath.delete();
+										System.out.println("Menghapus file " + fileName + "...");
+										filePath.createNewFile(); 
+										System.out.println("File baru telah dibuat: " + fileName);
+								
+										try {
+											try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+												fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											System.out.println("1. Matrix Invers\n");
+											for (int i = 0; i < matrixInverseGauss.getRowLength(); i++) {
+												for (int j = 0; j < matrixInverseGauss.getColumnLength()-1; j++) {
+													fileWriter.write(String.valueOf(matrixIdentity.getElement(i+1, j+1)));
+													fileWriter.write(" ");
+												}
+												fileWriter.write(String.valueOf(matrixIdentity.getElement(i+1, matrixInverseGauss.getColumnLength())));
+												fileWriter.write(" | ");
+												for (int j = 0; j < matrixInverseGauss.getColumnLength()-1; j++) {
+													fileWriter.write(String.valueOf(matrixInverseGauss.getElement(i+1, j+1)));
+													fileWriter.write(" ");
+												}
+												fileWriter.write(String.valueOf(matrixInverseGauss.getElement(i+1, matrixInverseGauss.getColumnLength())));
+												fileWriter.write("\n");
+											}
+											System.out.println("----------------------------------\n");
+											}
+											System.out.print("");
+										} catch (IOException e) {
+											System.out.print("Terjadi Kesalahan");
+										}
+									} else {
+										System.out.print("Aksi dibatalkan");
+									}
+								}
+							} catch (IOException e) {
+								System.out.print("Terjadi kesalahan"); 
+							}
+						}
+						}
+					}
+				} else /*inputMenu1 == 2*/ {
+					System.out.println("INVERS MATRIKS MENGGUNAKAN MATRIKS ADJOIN");
+					Matrix matrixinput = new Matrix();
+					mainMenu("menuRead");
+					int inputMenu2 = input.nextInt();
+					while (inputMenu2 != 1 && inputMenu2 != 2) {
+						System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
+						System.out.print("Pilihan Anda: ");
+						inputMenu2 = input.nextInt();
+					} // inputMenu2 == 1 || inputMenu2 == 2
+
+					if (inputMenu2 == 1) {
+						int row, column;
+						System.out.print("Masukkan jumlah baris: ");
+						row = input.nextInt();
+						System.out.print("Masukkan jumlah kolom: ");
+						column = input.nextInt();
+						matrixinput.createMatrix(row, column);
+						double inputitem;
+
+						for (int i = 0; i < matrixinput.getRowLength(); i++) {
+							for (int j = 0; j < matrixinput.getColumnLength(); j++) {
+								inputitem = input.nextDouble();
+								matrixinput.setElement(inputitem, i+1, j+1);
+							}
+						}
+					} else /*inputMenu2 == 2*/ {
+						System.out.print("Masukkan file path: ");
+						String filePath;
+						filePath = inputStr.nextLine();
+						matrixinput.readMatrixFromFile(filePath);
+					}
+					
+					Matrix matrixSquare = new Matrix();
+					matrixSquare.createMatrix(matrixinput.getRowLength(), matrixinput.getColumnLength());
 
 					for (int i = 0; i < matrixinput.getRowLength(); i++) {
 						for (int j = 0; j < matrixinput.getColumnLength(); j++) {
-							inputitem = input.nextDouble();
-							matrixinput.setElement(inputitem, i+1, j+1);
+							matrixSquare.setElement(matrixinput.getElement(i+1, j+1), i+1, j+1);
 						}
 					}
-				} else /*inputMenu2 == 2*/ {
-					System.out.print("Masukkan file path: ");
-					String filePath;
-					filePath = inputStr.nextLine();
-					matrixinput.readMatrixFromFile(filePath);
-				}
-				
-				Matrix matrixSquare = new Matrix();
-				matrixSquare.createMatrix(matrixinput.getRowLength(), matrixinput.getColumnLength()-1);
 
-				for (int i = 0; i < matrixinput.getRowLength(); i++) {
-					for (int j = 0; j < matrixinput.getColumnLength() - 1; j++) {
-						matrixSquare.setElement(matrixinput.getElement(i+1, j+1), i+1, j+1);
-					}
-				}
+					if (matrixSquare.getColumnLength() != matrixSquare.getRowLength()) {
+						System.out.println("Matriks variabel yang tidak berbentuk persegi tidak memiliki invers.");
+					} else {
+						Matrix outputMatrixInverse = new Matrix();
+						outputMatrixInverse = Inverse.inverse(matrixSquare, matrixSquare.getRowLength());
 
-				if (matrixSquare.getColumnLength() != matrixSquare.getRowLength()) {
-					System.out.println("Matriks variabel yang tidak berbentuk persegi tidak memiliki invers.");
-				} else {
-					Matrix outputMatrixInverse = new Matrix();
-					outputMatrixInverse = Inverse.inverse(matrixSquare, matrixSquare.getRowLength());
-
-					mainMenu("menuWrite"); 
-					int inputMenu3;
-					inputMenu3 = input.nextInt();
-
-					while (inputMenu3 != 1 && inputMenu3 != 2) {
-						System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
-						System.out.print("Pilihan Anda: ");
+						mainMenu("menuWrite"); 
+						int inputMenu3;
 						inputMenu3 = input.nextInt();
-					} // inputMenu3 == 1 || inputMenu3 == 2
 
-					if (inputMenu3 == 1) {
-						System.out.println("----------------------------------");
-						System.out.println("HASIL PERHITUNGAN");
-						System.out.println("1. Matrix Invers");
-						outputMatrixInverse.writeTerminal();
-						System.out.println("----------------------------------");
-					} else /*inputMenu3 == 2*/ {
+						while (inputMenu3 != 1 && inputMenu3 != 2) {
+							System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
+							System.out.print("Pilihan Anda: ");
+							inputMenu3 = input.nextInt();
+						} // inputMenu3 == 1 || inputMenu3 == 2
 
+						if (inputMenu3 == 1) {
+							System.out.println("----------------------------------");
+							System.out.println("HASIL PERHITUNGAN");
+							System.out.println("1. Matrix Invers");
+							outputMatrixInverse.writeTerminal();
+							System.out.println("----------------------------------");
+						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan nama file (dengan extension): ");
+							String fileName = inputStr.nextLine();
+
+							String absolutePath = ".\\output\\" + fileName;
+							try {
+								File filePath = new File(absolutePath);
+								if (filePath.createNewFile()) {
+									System.out.println("File telah dibuat: " + fileName);
+									try {
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Matrix Inverse\n");
+											Inverse.writeInverse(fileWriter, outputMatrixInverse);
+											fileWriter.write("----------------------------------\n");
+										}
+										System.out.print("");
+									} catch (IOException e) {
+										System.out.print("Terjadi Kesalahan");
+									}
+								} else {
+									System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+									int choiceScanner = input.nextInt();
+				
+									while (choiceScanner != 1 && choiceScanner != 2) {
+										choiceScanner = input.nextInt();
+									}
+				
+									if (choiceScanner == 1) {
+										filePath.delete();
+										System.out.println("Menghapus file " + fileName + "...");
+										filePath.createNewFile(); 
+										System.out.println("File baru telah dibuat: " + fileName);
+								
+										try {
+											try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+												fileWriter.write("----------------------------------\n");
+												fileWriter.write("HASIL PERHITUNGAN\n");
+												fileWriter.write("1. Matrix Inverse\n");
+												Inverse.writeInverse(fileWriter, outputMatrixInverse);
+												fileWriter.write("----------------------------------\n");
+											}
+											System.out.print("");
+										} catch (IOException e) {
+											System.out.print("Terjadi Kesalahan");
+										}
+									} else {
+										System.out.print("Aksi dibatalkan");
+									}
+								}
+							} catch (IOException e) {
+								System.out.print("Terjadi kesalahan"); 
+							}
+						}
 					}
 				}
 			} else if (inputMenu == 4) {
@@ -549,18 +1162,19 @@ public class Main {
 					inputMenu2 = input.nextInt();
 				} // inputMenu2 == 1 || inputMenu2 == 2
 
+				Matrix matrixinput2 = new Matrix();
 				if (inputMenu2 == 1) {
 					int count;
 					System.out.print("Masukkan banyaknya nilai yang akan di interpolasi: ");
 					count = input.nextInt();
 
-					matrixinput.createMatrix(count, 1);
+					matrixinput2.createMatrix(count, 1);
 					double inputitem;
 
-					for (int i = 0; i < matrixinput.getRowLength(); i++) {
-						for (int j = 0; j < matrixinput.getColumnLength(); j++) {
+					for (int i = 0; i < matrixinput2.getRowLength(); i++) {
+						for (int j = 0; j < matrixinput2.getColumnLength(); j++) {
 							inputitem = input.nextDouble();
-							matrixinput.setElement(inputitem, i+1, j+1);
+							matrixinput2.setElement(inputitem, i+1, j+1);
 						}
 					}
 				} else /*inputMenu2 == 2*/ {
@@ -598,8 +1212,9 @@ public class Main {
 					if (inputMenu3 == 1) {
 						System.out.println("----------------------------------");
 						System.out.println("HASIL PERHITUNGAN");
-						System.out.println("1. Matrix Invers");
+						System.out.println("1. Hasil Taksiran");
 						outputMatrixInverse.writeTerminal();
+						System.out.println("2. Taksiran");
 						System.out.println("----------------------------------");
 					} else /*inputMenu3 == 2*/ {
 
@@ -618,42 +1233,7 @@ public class Main {
 				} // inputMenu2 == 1 || inputMenu2 == 2
 
 				if (inputMenu2 == 1) {
-					int count;
-					System.out.print("Masukkan jumlah titik: ");
-					count = input.nextInt();
-					
-					matrixinput.createMatrix(count, 2);
-
-					for (int i = 0; i < matrixinput.getRowLength(); i++) {
-						System.out.print("Input titik ke ");
-						System.out.println(i+1);
-						Point inputPoint = new Point();
-						inputPoint.readPoint();
-						matrixinput.setElement(inputPoint.getPointAbsis(), i+1, 1);
-						matrixinput.setElement(inputPoint.getPointOrdinat(), i+1, 2);
-					}
-				} else /*inputMenu2 == 2*/ {
-					System.out.print("Masukkan file path data titik: ");
-					String filePath;
-					filePath = inputStr.nextLine();
-					matrixinput.readMatrixFromFile(filePath);
-				}
-
-				System.out.println("INPUT DATA NILAI YANG AKAN DI INTERPOLASI");
-				mainMenu("menuRead");
-				inputMenu2 = input.nextInt();
-				while (inputMenu2 != 1 && inputMenu2 != 2) {
-					System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
-					System.out.print("Pilihan Anda: ");
-					inputMenu2 = input.nextInt();
-				} // inputMenu2 == 1 || inputMenu2 == 2
-
-				if (inputMenu2 == 1) {
-					int count;
-					System.out.print("Masukkan banyaknya nilai yang akan di interpolasi: ");
-					count = input.nextInt();
-
-					matrixinput.createMatrix(count, 1);
+					matrixinput.createMatrix(4, 4);
 					double inputitem;
 
 					for (int i = 0; i < matrixinput.getRowLength(); i++) {
@@ -663,46 +1243,132 @@ public class Main {
 						}
 					}
 				} else /*inputMenu2 == 2*/ {
-					System.out.print("Masukkan file path data nilai: ");
+					System.out.print("Masukkan file path data titik: ");
 					String filePath;
 					filePath = inputStr.nextLine();
 					matrixinput.readMatrixFromFile(filePath);
 				}
-				
-				Matrix matrixSquare = new Matrix();
-				matrixSquare.createMatrix(matrixinput.getRowLength(), matrixinput.getColumnLength()-1);
 
-				for (int i = 0; i < matrixinput.getRowLength(); i++) {
-					for (int j = 0; j < matrixinput.getColumnLength() - 1; j++) {
-						matrixSquare.setElement(matrixinput.getElement(i+1, j+1), i+1, j+1);
+				System.out.println("INPUT DATA NILAI YANG AKAN DI DIINTERPOLASI BICUBIC");
+				mainMenu("menuRead");
+				inputMenu2 = input.nextInt();
+				while (inputMenu2 != 1 && inputMenu2 != 2) {
+					System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
+					System.out.print("Pilihan Anda: ");
+					inputMenu2 = input.nextInt();
+				} // inputMenu2 == 1 || inputMenu2 == 2
+
+				Matrix matrixinput2 = new Matrix();
+
+				if (inputMenu2 == 1) {
+					int count;
+					System.out.print("Masukkan banyaknya titik yang akan di interpolasi: ");
+					count = input.nextInt();
+
+					matrixinput2.createMatrix(count, 2);
+
+					for (int i = 0; i < matrixinput2.getRowLength(); i++) {
+						System.out.print("Input titik ke ");
+						System.out.println(i+1);
+						Point inputPoint = new Point();
+						inputPoint.readPoint();
+						matrixinput2.setElement(inputPoint.getPointAbsis(), i+1, 1);
+						matrixinput2.setElement(inputPoint.getPointOrdinat(), i+1, 2);
 					}
+				} else /*inputMenu2 == 2*/ {
+					System.out.print("Masukkan file path data nilai: ");
+					String filePath;
+					filePath = inputStr.nextLine();
+					matrixinput2.readMatrixFromFile(filePath);
 				}
 
-				if (matrixSquare.getColumnLength() != matrixSquare.getRowLength()) {
-					System.out.println("Matriks variabel yang tidak berbentuk persegi tidak memiliki invers.");
-				} else {
-					Matrix outputMatrixInverse = new Matrix();
-					outputMatrixInverse = Inverse.inverse(matrixSquare, matrixSquare.getRowLength());
+				mainMenu("menuWrite"); 
+				int inputMenu3;
+				inputMenu3 = input.nextInt();
 
-					mainMenu("menuWrite"); 
-					int inputMenu3;
+				while (inputMenu3 != 1 && inputMenu3 != 2) {
+					System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
+					System.out.print("Pilihan Anda: ");
 					inputMenu3 = input.nextInt();
+				} // inputMenu3 == 1 || inputMenu3 == 2
 
-					while (inputMenu3 != 1 && inputMenu3 != 2) {
-						System.out.println("Masukkan salah! Silahkan input masukan yang valid!");
-						System.out.print("Pilihan Anda: ");
-						inputMenu3 = input.nextInt();
-					} // inputMenu3 == 1 || inputMenu3 == 2
-
-					if (inputMenu3 == 1) {
-						System.out.println("----------------------------------");
-						System.out.println("HASIL PERHITUNGAN");
-						System.out.println("1. Matrix Invers");
-						outputMatrixInverse.writeTerminal();
-						System.out.println("----------------------------------");
-					} else /*inputMenu3 == 2*/ {
-
+				if (inputMenu3 == 1) {
+					System.out.println("----------------------------------");
+					System.out.println("HASIL PERHITUNGAN");
+					System.out.println("1. Hasil Taksiran Menggunakan Interpolasi Bicubic");
+					for (int i = 0; i < matrixinput2.getRowLength(); i++) {
+						System.out.printf("f(%f, %f) = ", matrixinput2.getElement(i+1, 1), matrixinput2.getElement(i+1, 2));
+						System.out.println(Bicubic.calcBicubic(matrixinput, matrixinput2.getElement(i+1, 1), matrixinput2.getElement(i+1, 2)));
 					}
+					System.out.println("----------------------------------");
+				} else /*inputMenu3 == 2*/ {
+					System.out.print("Masukkan nama file (dengan extension): ");
+							String fileName = inputStr.nextLine();
+
+							String absolutePath = ".\\output\\" + fileName;
+							try {
+								File filePath = new File(absolutePath);
+								if (filePath.createNewFile()) {
+									System.out.println("File telah dibuat: " + fileName);
+									try {
+										try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+											fileWriter.write("----------------------------------\n");
+											fileWriter.write("HASIL PERHITUNGAN\n");
+											fileWriter.write("1. Hasil Taksiran Menggunakan Interpolasi Bicubic\n");
+											for (int i = 0; i < matrixinput2.getRowLength(); i++) {
+												fileWriter.write("f(");
+												fileWriter.write(String.valueOf(matrixinput2.getElement(i+1, 1)));
+												fileWriter.write(String.valueOf(matrixinput2.getElement(i+1, 2)));
+												fileWriter.write(") = ");
+												fileWriter.write(String.valueOf(Bicubic.calcBicubic(matrixinput, matrixinput2.getElement(i+1, 1), matrixinput2.getElement(i+1, 2))));
+												fileWriter.write("\n");
+											}
+											fileWriter.write("----------------------------------\n");
+										}
+										System.out.println("Output telah tersedia pada file");
+									} catch (IOException e) {
+										System.out.println("Terjadi Kesalahan");
+									}
+								} else {
+									System.out.println("File sudah tersedia, apakah Anda ingin overwrite file tersebut? (Ya = 1/No = 2)");
+									int choiceScanner = input.nextInt();
+				
+									while (choiceScanner != 1 && choiceScanner != 2) {
+										choiceScanner = input.nextInt();
+									}
+				
+									if (choiceScanner == 1) {
+										filePath.delete();
+										System.out.println("Menghapus file " + fileName + "...");
+										filePath.createNewFile(); 
+										System.out.println("File baru telah dibuat: " + fileName);
+								
+										try {
+											try (FileWriter fileWriter = new FileWriter(absolutePath)) {
+												fileWriter.write("----------------------------------\n");
+												fileWriter.write("HASIL PERHITUNGAN\n");
+												fileWriter.write("1. Hasil Taksiran Menggunakan Interpolasi Bicubic\n");
+												for (int i = 0; i < matrixinput2.getRowLength(); i++) {
+													fileWriter.write("f(");
+													fileWriter.write(String.valueOf(matrixinput2.getElement(i+1, 1)));
+													fileWriter.write(String.valueOf(matrixinput2.getElement(i+1, 2)));
+													fileWriter.write(") = ");
+													fileWriter.write(String.valueOf(Bicubic.calcBicubic(matrixinput, matrixinput2.getElement(i+1, 1), matrixinput2.getElement(i+1, 2))));
+													fileWriter.write("\n");
+												}
+												fileWriter.write("----------------------------------\n");
+											}
+											System.out.print("");
+										} catch (IOException e) {
+											System.out.print("Terjadi Kesalahan");
+										}
+									} else {
+										System.out.print("Aksi dibatalkan");
+									}
+								}
+							} catch (IOException e) {
+								System.out.print("Terjadi kesalahan"); 
+							}
 				}
 			} else if (inputMenu == 6) {
 				System.out.println("MENCARI TAKSIRAN NILAI MELALUI REGRESI LINEAR BERGANDA");
@@ -791,6 +1457,7 @@ public class Main {
 					System.out.println("----------------------------------");
 					System.out.println("HASIL PERHITUNGAN");
 					System.out.println("1. Persamaan Regresi");
+					System.out.print("y = ");
 					for (int i = 0; i < resultRegressionEquation.length; i++) {
 						if (i == 0) {
 							System.out.print(resultRegressionEquation[i]);
@@ -821,13 +1488,10 @@ public class Main {
 					}
 					System.out.println("----------------------------------");
 				} else /*inputMenu3 == 2*/ {
-					System.out.print("Masukkan path folder tujuan: ");
-					String fileFolderPath = inputStr.nextLine();
-
 					System.out.print("Masukkan nama file (dengan extension): ");
             		String fileName = inputStr.nextLine();
 
-					String absolutePath = fileFolderPath + "\\" + fileName;
+					String absolutePath = ".\\output\\" + fileName;
 					try {
 						File filePath = new File(absolutePath);
 						if (filePath.createNewFile()) {
@@ -838,7 +1502,7 @@ public class Main {
 									fileWriter.write("----------------------------------\n");
 									fileWriter.write("HASIL PERHITUNGAN\n");
 									fileWriter.write("1. Persamaan Regresi\n");
-									line = "";
+									line = "y = ";
 
 									for (int i = 0; i < resultRegressionEquation.length; i++) {
 										if (i == 0) {
@@ -898,7 +1562,7 @@ public class Main {
 										fileWriter.write("----------------------------------\n");
 										fileWriter.write("HASIL PERHITUNGAN\n");
 										fileWriter.write("1. Persamaan Regresi\n");
-										line = "";
+										line = "y = ";
 
 										for (int i = 0; i < resultRegressionEquation.length; i++) {
 											if (i == 0) {
@@ -946,8 +1610,9 @@ public class Main {
 						System.out.println("Terjadi kesalahan."); 
 					}
 				}
-			} else /* inputMenu == 6*/ {
-				System.out.println("PENERAPAN INTERPOLASI BICUBIC: IMAGE SCALLING");
+			} else /* inputMenu == 7*/ {
+				System.out.println("PENERAPAN INTERPOLASI BICUBIC: IMAGE SCALING");
+				ScaleImage.scaleImage(ScaleImage.readImage());
 			}
 			mainMenu("mainMenu");
 			inputMenu = input.nextInt();
