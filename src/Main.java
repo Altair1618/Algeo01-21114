@@ -1152,9 +1152,7 @@ public class Main {
 					filePath = inputStr.nextLine();
 					matrixinput.readMatrixPointFromFile(filePath);
 				}
-
-				matrixinput.writeTerminal();
-
+				
 				System.out.println("INPUT DATA NILAI YANG AKAN DI INTERPOLASI");
 				mainMenu("menuRead");
 				inputMenu2 = input.nextInt();
