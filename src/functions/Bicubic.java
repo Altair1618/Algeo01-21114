@@ -53,7 +53,7 @@ public class Bicubic {
         int idx = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                val += mcof.getElement(idx + 1, 1) * Math.pow(x, i) * Math.pow(y, j);
+                val += mcof.getElement(idx + 1, 1) * Math.pow(x, j) * Math.pow(y, i);
                 idx++;
             }
         }
