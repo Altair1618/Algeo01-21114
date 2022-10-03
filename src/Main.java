@@ -3,8 +3,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import dataStructure.*;
-import functions.*;
+import dataStructure.Matrix;
+import dataStructure.Point;
+import functions.Bicubic;
+import functions.Cramer;
+import functions.Determinant;
+import functions.Gauss;
+import functions.Interpolasi_polinom;
+import functions.Inverse;
+import functions.Regression;
+import functions.ScaleImage;
+import functions.detRedux;
 
 public class Main {
 	static void mainMenu(String command) {
@@ -49,7 +58,7 @@ public class Main {
 			System.out.println("Penentuan Nilai Matriks Invers");
 			System.out.println("Pilih metode perhitungan:");
 			System.out.println("1. Metode Gauss");
-			System.out.println("2. Metode Ekspansi Kofaktor");
+			System.out.println("2. Metode Matriks Adjoin");
 			System.out.print("Pilihan Anda: ");
 		}
 		
@@ -132,10 +141,13 @@ public class Main {
 						Gauss.solveSPL(outputMatrixGauss);
 						System.out.println("----------------------------------");
 					} else /*inputMenu3 == 2*/ {
+						System.out.print("Masukkan folder Path (pastikan folder ada): ");
+						String folderPath = inputStr.nextLine();
+
 						System.out.print("Masukkan nama file (dengan extension): ");
 						String fileName = inputStr.nextLine();
 
-						String absolutePath = ".\\output\\" + fileName;
+						String absolutePath = folderPath + "\\" + fileName;
 						try {
 							File filePath = new File(absolutePath);
 							if (filePath.createNewFile()) {
@@ -269,10 +281,13 @@ public class Main {
 						Gauss.solveSPL(outputMatrixGaussJordan);
 						System.out.println("----------------------------------");
 					} else /*inputMenu3 == 2*/ {
+						System.out.print("Masukkan folder Path (pastikan folder ada): ");
+						String folderPath = inputStr.nextLine();
+
 						System.out.print("Masukkan nama file (dengan extension): ");
 						String fileName = inputStr.nextLine();
 
-						String absolutePath = ".\\output\\" + fileName;
+						String absolutePath = folderPath + "\\" + fileName;
 						try {
 							File filePath = new File(absolutePath);
 							if (filePath.createNewFile()) {
@@ -418,10 +433,13 @@ public class Main {
 							Inverse.displayInvSPLResult(Inverse.inverseSPL(matrixinput, matrixinput.getColumnLength()-1));
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan folder Path (pastikan folder ada): ");
+							String folderPath = inputStr.nextLine();
+
 							System.out.print("Masukkan nama file (dengan extension): ");
 							String fileName = inputStr.nextLine();
 
-							String absolutePath = ".\\output\\" + fileName;
+							String absolutePath = folderPath + "\\" + fileName;
 							try {
 								File filePath = new File(absolutePath);
 								if (filePath.createNewFile()) {
@@ -530,10 +548,13 @@ public class Main {
 							Cramer.displaySPLCramerResult(Cramer.cramerSPL(matrixinput, matrixinput.getColumnLength()-1));
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan folder Path (pastikan folder ada): ");
+							String folderPath = inputStr.nextLine();
+
 							System.out.print("Masukkan nama file (dengan extension): ");
 							String fileName = inputStr.nextLine();
 
-							String absolutePath = ".\\output\\" + fileName;
+							String absolutePath = folderPath + "\\" + fileName;
 							try {
 								File filePath = new File(absolutePath);
 								if (filePath.createNewFile()) {
@@ -652,10 +673,13 @@ public class Main {
 							System.out.println(detRedux.detByReduction(matrixinput));
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan folder Path (pastikan folder ada): ");
+							String folderPath = inputStr.nextLine();
+
 							System.out.print("Masukkan nama file (dengan extension): ");
 							String fileName = inputStr.nextLine();
 
-							String absolutePath = ".\\output\\" + fileName;
+							String absolutePath = folderPath + "\\" + fileName;
 							try {
 								File filePath = new File(absolutePath);
 								if (filePath.createNewFile()) {
@@ -778,10 +802,13 @@ public class Main {
 							System.out.println(Determinant.detExCof(matrixinput, matrixinput.getColumnLength()));
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan folder Path (pastikan folder ada): ");
+							String folderPath = inputStr.nextLine();
+
 							System.out.print("Masukkan nama file (dengan extension): ");
 							String fileName = inputStr.nextLine();
 
-							String absolutePath = ".\\output\\" + fileName;
+							String absolutePath = folderPath + "\\" + fileName;
 							try {
 								File filePath = new File(absolutePath);
 								if (filePath.createNewFile()) {
@@ -916,10 +943,13 @@ public class Main {
 							}
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan folder Path (pastikan folder ada): ");
+							String folderPath = inputStr.nextLine();
+
 							System.out.print("Masukkan nama file (dengan extension): ");
 							String fileName = inputStr.nextLine();
 
-							String absolutePath = ".\\output\\" + fileName;
+							String absolutePath = folderPath + "\\" + fileName;
 							try {
 								File filePath = new File(absolutePath);
 								if (filePath.createNewFile()) {
@@ -1063,10 +1093,13 @@ public class Main {
 							outputMatrixInverse.writeTerminal();
 							System.out.println("----------------------------------");
 						} else /*inputMenu3 == 2*/ {
+							System.out.print("Masukkan folder Path (pastikan folder ada): ");
+							String folderPath = inputStr.nextLine();
+
 							System.out.print("Masukkan nama file (dengan extension): ");
 							String fileName = inputStr.nextLine();
 
-							String absolutePath = ".\\output\\" + fileName;
+							String absolutePath = folderPath + "\\" + fileName;
 							try {
 								File filePath = new File(absolutePath);
 								if (filePath.createNewFile()) {
@@ -1206,10 +1239,13 @@ public class Main {
 					Interpolasi_polinom.displayValueOfFx(matrixSolution, matrixinput2);
 					System.out.println("----------------------------------");
 				} else /*inputMenu3 == 2*/ {
+					System.out.print("Masukkan folder Path (pastikan folder ada): ");
+					String folderPath = inputStr.nextLine();
+
 					System.out.print("Masukkan nama file (dengan extension): ");
 					String fileName = inputStr.nextLine();
 
-					String absolutePath = ".\\output\\" + fileName;
+					String absolutePath = folderPath + "\\" + fileName;
 					try {
 						File filePath = new File(absolutePath);
 						if (filePath.createNewFile()) {
@@ -1346,10 +1382,13 @@ public class Main {
 					}
 					System.out.println("----------------------------------");
 				} else /*inputMenu3 == 2*/ {
+					System.out.print("Masukkan folder Path (pastikan folder ada): ");
+					String folderPath = inputStr.nextLine();
+
 					System.out.print("Masukkan nama file (dengan extension): ");
 					String fileName = inputStr.nextLine();
 
-					String absolutePath = ".\\output\\" + fileName;
+					String absolutePath = folderPath + "\\" + fileName;
 					try {
 						File filePath = new File(absolutePath);
 						if (filePath.createNewFile()) {
@@ -1532,10 +1571,13 @@ public class Main {
 					}
 					System.out.println("----------------------------------");
 				} else /*inputMenu3 == 2*/ {
-					System.out.print("Masukkan nama file (dengan extension): ");
-            		String fileName = inputStr.nextLine();
+					System.out.print("Masukkan folder Path (pastikan folder ada): ");
+					String folderPath = inputStr.nextLine();
 
-					String absolutePath = ".\\output\\" + fileName;
+					System.out.print("Masukkan nama file (dengan extension): ");
+					String fileName = inputStr.nextLine();
+
+					String absolutePath = folderPath + "\\" + fileName;
 					try {
 						File filePath = new File(absolutePath);
 						if (filePath.createNewFile()) {
